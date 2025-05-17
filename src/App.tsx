@@ -174,196 +174,272 @@ const Home = () => {
         minHeight: '100vh',
         position: 'relative',
         overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column',
+        display: 'grid',
+        gridTemplateColumns: '1fr',
+        gridTemplateRows: 'auto 1fr auto',
+        gap: 4
       }}>
         <VideoBackground />
         
-        {/* Header Section */}
-        <Box sx={{ pt: 8, pb: 4, position: 'relative' }}>
-          <Container maxWidth="lg">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
+        {/* Header Section - Reimagined as a side-scrolling banner */}
+        <Box sx={{ 
+          position: 'relative',
+          overflow: 'hidden',
+          height: '100vh',
+          display: 'flex',
+          alignItems: 'center'
+        }}>
+          <motion.div
+            initial={{ x: '100%' }}
+            animate={{ x: '0%' }}
+            transition={{ duration: 1.2, ease: "easeOut" }}
+            style={{ width: '100%' }}
+          >
+            <Typography 
+              variant="h1" 
+              sx={{ 
+                fontSize: 'clamp(3rem, 15vw, 12rem)',
+                textAlign: 'left',
+                mb: 2,
+                pl: 4,
+                background: 'linear-gradient(45deg, #ffffff, transparent)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                transform: 'translateX(-5%)'
+              }}
             >
-              <Typography 
-                variant="h1" 
-                sx={{ 
-                  fontSize: 'clamp(3rem, 10vw, 7rem)',
-                  textAlign: 'center',
-                  mb: 2
-                }}
-              >
-                Batch Sixteenz
-              </Typography>
-              <Typography 
-                variant="body1" 
-                sx={{ 
-                  textAlign: 'center',
-                  maxWidth: '800px',
-                  mx: 'auto',
-                  opacity: 0.8,
-                  mb: 6
-                }}
-              >
-                A vibrant community of AAU graduates from 2016, united by shared memories
-                and committed to fostering lasting connections and professional growth.
-              </Typography>
-            </motion.div>
-          </Container>
+              Batch Sixteenz
+            </Typography>
+          </motion.div>
         </Box>
 
-        {/* Enhanced Announcement Section */}
-        <Box sx={{ position: 'relative', mb: 12 }}>
-          <Container maxWidth="lg">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            >
-              <Typography variant="h2" sx={{ 
-                mb: 4, 
-                textAlign: 'center',
-                textShadow: '2px 2px 4px rgba(0,0,0,0.5)' // Add text shadow
-              }}>
-                Latest Updates
-              </Typography>
-              <Box sx={{
-                display: 'flex',
-                gap: 3,
-                flexWrap: 'wrap',
-                justifyContent: 'center'
-              }}>
-                {announcements.map((announcement, index) => (
-                  <motion.div
-                    key={announcement.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    style={{ flex: '1 1 300px', maxWidth: '400px' }}
+        {/* Dynamic Grid Layout for Updates and Navigation */}
+        <Box sx={{ 
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gap: 3,
+          p: 4,
+          position: 'relative'
+        }}>
+          {/* Latest Updates - As floating cards */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            style={{
+              gridColumn: '1 / -1',
+              marginBottom: '4rem'
+            }}
+          >
+            <Box sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 4
+            }}>
+              {announcements.map((announcement, index) => (
+                <motion.div
+                  key={announcement.id}
+                  initial={{ x: index % 2 === 0 ? -100 : 100, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ 
+                    duration: 0.8,
+                    delay: index * 0.2,
+                    type: "spring",
+                    stiffness: 50
+                  }}
+                >
+                  <Box
+                    sx={{
+                      background: 'rgba(0, 0, 0, 0.4)',
+                      p: 4,
+                      borderRadius: '30px',
+                      ml: index % 2 === 0 ? 0 : 'auto',
+                      width: { xs: '100%', md: '80%' },
+                      transform: `rotate(${index % 2 === 0 ? '-2' : '2'}deg)`,
+                      '&:hover': {
+                        transform: 'rotate(0deg) scale(1.02)',
+                      }
+                    }}
+                    onClick={() => setSelectedAnnouncement(announcement)}
                   >
-                    <Box
-                      sx={{
-                        bgcolor: 'rgba(0,0,0,0.75)', // Darker background
-                        p: 4,
-                        borderRadius: 2,
-                        cursor: 'pointer',
-                        transition: 'all 0.3s ease',
+                    <Typography 
+                      className="icon"
+                      sx={{ 
+                        fontSize: '3.5rem',
+                        mb: 2,
+                        transition: 'transform 0.4s ease',
+                        display: 'block'
+                      }}
+                    >
+                      {announcement.icon}
+                    </Typography>
+                    <Typography variant="h3" sx={{ 
+                      mb: 2,
+                      textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+                      fontWeight: 600,
+                      letterSpacing: '-0.02em',
+                      color: 'rgba(255, 255, 255, 0.95)'
+                    }}>
+                      {announcement.title}
+                    </Typography>
+                    <Typography variant="body2" sx={{ 
+                      opacity: 0.7,
+                      mb: 2,
+                      textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
+                    }}>
+                      {announcement.date}
+                    </Typography>
+                    <Typography variant="body1" sx={{ 
+                      opacity: 0.9,
+                      textShadow: '1px 1px 2px rgba(0,0,0,0.3)',
+                      fontSize: '1.1rem',
+                      lineHeight: 1.6,
+                      color: 'rgba(255, 255, 255, 0.8)'
+                    }}>
+                      {announcement.description.substring(0, 100)}...
+                    </Typography>
+                    <Button 
+                      variant="text" 
+                      sx={{ 
+                        mt: 'auto', 
+                        alignSelf: 'flex-start',
+                        color: 'primary.main',
                         border: '1px solid rgba(255,255,255,0.2)',
-                        height: '100%',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        backdropFilter: 'blur(10px)', // Add blur effect
-                        boxShadow: '0 8px 32px rgba(0,0,0,0.3)', // Add shadow
+                        borderRadius: '10px',
+                        padding: '8px 16px',
+                        transition: 'all 0.3s ease',
                         '&:hover': {
-                          bgcolor: 'rgba(0,0,0,0.85)',
-                          transform: 'translateY(-5px)',
-                          boxShadow: '0 12px 40px rgba(0,0,0,0.4)'
+                          background: 'rgba(255,255,255,0.1)',
+                          transform: 'translateY(-2px)'
                         }
                       }}
                       onClick={() => setSelectedAnnouncement(announcement)}
                     >
-                      <Typography variant="h1" sx={{ fontSize: '3rem', mb: 2 }}>
-                        {announcement.icon}
-                      </Typography>
-                      <Typography variant="h4" sx={{ mb: 2 }}>
-                        {announcement.title}
-                      </Typography>
-                      <Typography variant="body2" sx={{ opacity: 0.7, mb: 2 }}>
-                        {announcement.date}
-                      </Typography>
-                      <Typography variant="body1" sx={{ opacity: 0.9 }}>
-                        {announcement.description.substring(0, 100)}...
-                      </Typography>
-                      <Button 
-                        variant="text" 
-                        sx={{ 
-                          mt: 'auto', 
-                          alignSelf: 'flex-start',
-                          color: 'primary.main',
-                          '&:hover': {
-                            bgcolor: 'rgba(255,255,255,0.1)'
-                          }
-                        }}
-                        onClick={() => setSelectedAnnouncement(announcement)}
-                      >
-                        Read More
-                      </Button>
-                    </Box>
-                  </motion.div>
-                ))}
-              </Box>
-            </motion.div>
-          </Container>
-        </Box>
-
-        {/* Navigation Sections */}
-        <Box sx={{ position: 'relative', pb: 12 }}>
-          <Container maxWidth="lg">
-            <Box sx={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: 4,
-              justifyContent: 'center'
-            }}>
-              {[
-                { title: 'Directory', path: '/directory', description: 'Connect with fellow alumni' },
-                { title: 'Events', path: '/events', description: 'Upcoming gatherings and meetups' },
-                { title: 'Forum', path: '/forum', description: 'Join the discussion' },
-                { title: 'Gallery', path: '/gallery', description: 'Memories in pictures' },
-                { title: 'Achievements', path: '/achievements', description: 'Celebrating our success' },
-                { title: 'Memoriam', path: '/memoriam', description: 'Remembering our friends' },
-              ].map((section, index) => (
-                <motion.div
-                  key={section.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: index * 0.1 }}
-                  style={{
-                    flex: '1 1 300px',
-                    maxWidth: '400px',
-                    minWidth: '280px'
-                  }}
-                >
-                  <Link to={section.path} style={{ textDecoration: 'none' }}>
-                    <Box sx={{
-                      bgcolor: 'rgba(0,0,0,0.75)', // Darker background
-                      p: 4,
-                      borderRadius: 2,
-                      cursor: 'pointer',
-                      transition: 'all 0.3s ease',
-                      border: '1px solid rgba(255,255,255,0.2)',
-                      height: '100%',
-                      backdropFilter: 'blur(10px)', // Add blur effect
-                      boxShadow: '0 8px 32px rgba(0,0,0,0.3)', // Add shadow
-                      '&:hover': {
-                        bgcolor: 'rgba(0,0,0,0.85)',
-                        transform: 'translateY(-5px)',
-                        boxShadow: '0 12px 40px rgba(0,0,0,0.4)'
-                      }
-                    }}>
-                      <Typography variant="h3" sx={{ 
-                        mb: 2,
-                        textShadow: '2px 2px 4px rgba(0,0,0,0.5)' // Add text shadow
-                      }}>
-                        {section.title}
-                      </Typography>
-                      <Typography variant="body1" sx={{ 
-                        opacity: 0.9,
-                        textShadow: '1px 1px 2px rgba(0,0,0,0.5)' // Add subtle text shadow
-                      }}>
-                        {section.description}
-                      </Typography>
-                    </Box>
-                  </Link>
+                      Read More
+                    </Button>
+                  </Box>
                 </motion.div>
               ))}
             </Box>
-          </Container>
+          </motion.div>
+
+          {/* Navigation Sections - As interactive tiles */}
+          {[
+            { 
+              title: 'Directory', 
+              path: '/directory', 
+              description: 'Connect with fellow alumni',
+              icon: '👥'
+            },
+            { 
+              title: 'Events', 
+              path: '/events', 
+              description: 'Upcoming gatherings and meetups',
+              icon: '🎉'
+            },
+            { 
+              title: 'Forum', 
+              path: '/forum', 
+              description: 'Join the discussion',
+              icon: '💭'
+            },
+            { 
+              title: 'Gallery', 
+              path: '/gallery', 
+              description: 'Memories in pictures',
+              icon: '📸'
+            },
+            { 
+              title: 'Achievements', 
+              path: '/achievements', 
+              description: 'Celebrating our success',
+              icon: '🏆'
+            },
+            { 
+              title: 'Memoriam', 
+              path: '/memoriam', 
+              description: 'Remembering our friends',
+              icon: '🕊️'
+            },
+          ].map((section, index) => (
+            <motion.div
+              key={section.title}
+              initial={{ 
+                opacity: 0,
+                rotateY: 180,
+                scale: 0.8
+              }}
+              animate={{ 
+                opacity: 1,
+                rotateY: 0,
+                scale: 1
+              }}
+              transition={{
+                duration: 0.8,
+                delay: index * 0.1,
+                type: "spring",
+                stiffness: 80
+              }}
+              whileHover={{
+                scale: 1.05,
+                rotateY: 10,
+                transition: { duration: 0.4 }
+              }}
+            >
+              <Link to={section.path} style={{ textDecoration: 'none' }}>
+                <Box sx={{
+                  background: 'rgba(0, 0, 0, 0.4)',
+                  aspectRatio: '1',
+                  p: 3,
+                  borderRadius: '20px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  perspective: '1000px',
+                  transformStyle: 'preserve-3d',
+                  '&:hover': {
+                    '& .icon': {
+                      transform: 'translateZ(20px) scale(1.2)',
+                    }
+                  }
+                }}>
+                  <Typography 
+                    className="icon"
+                    sx={{ 
+                      fontSize: '3.5rem',
+                      mb: 2,
+                      transition: 'transform 0.4s ease',
+                      display: 'block'
+                    }}
+                  >
+                    {section.icon}
+                  </Typography>
+                  <Typography variant="h3" sx={{ 
+                    mb: 2,
+                    textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+                    fontWeight: 600,
+                    letterSpacing: '-0.02em',
+                    color: 'rgba(255, 255, 255, 0.95)'
+                  }}>
+                    {section.title}
+                  </Typography>
+                  <Typography variant="body1" sx={{ 
+                    opacity: 0.9,
+                    textShadow: '1px 1px 2px rgba(0,0,0,0.3)',
+                    fontSize: '1.1rem',
+                    lineHeight: 1.6,
+                    color: 'rgba(255, 255, 255, 0.8)'
+                  }}>
+                    {section.description}
+                  </Typography>
+                </Box>
+              </Link>
+            </motion.div>
+          ))}
         </Box>
 
-        {/* Add the AnnouncementModal component */}
+        {/* Modal remains unchanged */}
         <AnnouncementModal
           announcement={selectedAnnouncement}
           open={selectedAnnouncement !== null}

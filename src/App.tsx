@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Typography, Box, Container, Button, Grid } from '@mui/material';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import { Typography, Box, Container, Button, Grid, IconButton } from '@mui/material';
 import Directory from './pages/Directory';
 import Events from './pages/Events';
 import Forum from './pages/Forum';
@@ -70,27 +70,122 @@ const theme = createTheme({
   },
 });
 
-const VideoBackground = () => (
-  <video
-    autoPlay
-    loop
-    muted
-    playsInline
-    style={{
-      position: 'fixed',
-      width: '100%',
-      height: '100%',
-      objectFit: 'cover',
-      zIndex: -1,
-      filter: 'brightness(0.6)',
-    }}
-  >
-    <source src="/Video/Batch.mp4" type="video/mp4" />
-  </video>
-);
+// Particle effect component
+const ParticleField = () => {
+  const particlesRef = useRef<HTMLDivElement>(null);
+  const [particles, setParticles] = useState<Array<{x: number, y: number, size: number, speed: number, color: string}>>([]);
+  
+  useEffect(() => {
+    if (!particlesRef.current) return;
+    
+    const container = particlesRef.current;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    
+    // Create particles
+    const newParticles = Array.from({ length: 50 }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      size: Math.random() * 3 + 1,
+      speed: Math.random() * 1 + 0.5,
+      color: `rgba(255, 255, 255, ${Math.random() * 0.5 + 0.2})`
+    }));
+    
+    setParticles(newParticles);
+    
+    // Animation loop
+    let animationId: number;
+    const animate = () => {
+      setParticles(prev => prev.map(particle => ({
+        ...particle,
+        y: particle.y - particle.speed,
+        x: particle.x + Math.sin(particle.y * 0.01) * 0.5,
+        // Reset particles that go off screen
+        ...(particle.y < 0 ? { y: height, x: Math.random() * width } : {})
+      })));
+      
+      animationId = requestAnimationFrame(animate);
+    };
+    
+    animate();
+    
+    return () => cancelAnimationFrame(animationId);
+  }, []);
+  
+  return (
+    <div 
+      ref={particlesRef} 
+      style={{ 
+        position: 'fixed', 
+        top: 0, 
+        left: 0, 
+        width: '100%', 
+        height: '100%', 
+        pointerEvents: 'none',
+        zIndex: 0
+      }}
+    >
+      {particles.map((particle, index) => (
+        <div 
+          key={index}
+          style={{
+            position: 'absolute',
+            left: `${particle.x}px`,
+            top: `${particle.y}px`,
+            width: `${particle.size}px`,
+            height: `${particle.size}px`,
+            borderRadius: '50%',
+            backgroundColor: particle.color,
+            boxShadow: `0 0 ${particle.size * 2}px ${particle.color}`,
+          }}
+        />
+      ))}
+    </div>
+  );
+};
 
-// Add this new component for announcement details modal
-// Add interface for the announcement type
+// Immersive video background with parallax effect
+const VideoBackground = () => {
+  const { scrollYProgress } = useScroll();
+  const yPos = useTransform(scrollYProgress, [0, 1], [0, 100]);
+  
+  return (
+    <motion.div
+      style={{
+        position: 'fixed',
+        width: '100%',
+        height: '100%',
+        zIndex: -1,
+        y: yPos
+      }}
+    >
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        style={{
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          filter: 'brightness(0.4) contrast(1.2) saturate(1.2)',
+        }}
+      >
+        <source src="/Video/Batch.mp4" type="video/mp4" />
+      </video>
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        background: 'radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.8) 100%)',
+      }} />
+    </motion.div>
+  );
+};
+
+// Interface for announcement type
 interface Announcement {
   id: number;
   title: string;
@@ -99,57 +194,295 @@ interface Announcement {
   icon: string;
 }
 
-// Add interface for the modal props
+// Interface for modal props
 interface AnnouncementModalProps {
   announcement: Announcement | null;
   open: boolean;
   onClose: () => void;
 }
 
-// Fix the AnnouncementModal component with proper typing
+// 3D Floating Modal
 const AnnouncementModal = ({ announcement, open, onClose }: AnnouncementModalProps) => (
-  <motion.div
-    initial={{ opacity: 0, scale: 0.9 }}
-    animate={{ opacity: open ? 1 : 0, scale: open ? 1 : 0.9 }}
-    style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      display: open ? 'flex' : 'none',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: 'rgba(0,0,0,0.8)',
-      backdropFilter: 'blur(8px)',
-      zIndex: 1000,
-    }}
-    onClick={onClose}
-  >
-    {announcement && (
-      <Box
-        sx={{
-          bgcolor: 'rgba(255,255,255,0.1)',
-          p: 4,
-          borderRadius: 2,
-          maxWidth: '600px',
-          width: '90%',
-          border: '1px solid rgba(255,255,255,0.2)',
-          position: 'relative',
+  <AnimatePresence>
+    {open && (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: 'rgba(0,0,0,0.7)',
+          backdropFilter: 'blur(10px)',
+          zIndex: 1000,
+          perspective: '1000px',
         }}
-        onClick={(e) => e.stopPropagation()}
+        onClick={onClose}
       >
-        <Typography variant="h3" sx={{ mb: 3 }}>{announcement.title}</Typography>
-        <Typography variant="body1" sx={{ mb: 4 }}>{announcement.description}</Typography>
-        <Button variant="outlined" onClick={onClose}>Close</Button>
-      </Box>
+        {announcement && (
+          <motion.div
+            initial={{ rotateX: 30, y: 100, opacity: 0 }}
+            animate={{ rotateX: 0, y: 0, opacity: 1 }}
+            exit={{ rotateX: -30, y: 100, opacity: 0 }}
+            transition={{ type: 'spring', damping: 20 }}
+            style={{
+              background: 'linear-gradient(135deg, rgba(30,30,30,0.8) 0%, rgba(10,10,10,0.9) 100%)',
+              padding: '2rem',
+              borderRadius: '1rem',
+              maxWidth: '600px',
+              width: '90%',
+              border: '1px solid rgba(255,255,255,0.1)',
+              boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
+              position: 'relative',
+              transformStyle: 'preserve-3d',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              style={{ 
+                position: 'absolute', 
+                top: '-2rem', 
+                left: '50%', 
+                transform: 'translateX(-50%)',
+                fontSize: '4rem',
+                filter: 'drop-shadow(0 0 20px rgba(255,255,255,0.3))'
+              }}
+            >
+              {announcement.icon}
+            </motion.div>
+            
+            <Typography variant="h3" sx={{ 
+              mb: 3, 
+              mt: 4,
+              textAlign: 'center',
+              background: 'linear-gradient(90deg, #fff, #aaa)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              fontWeight: 600,
+            }}>
+              {announcement.title}
+            </Typography>
+            
+            <Typography variant="body1" sx={{ 
+              mb: 4,
+              lineHeight: 1.8,
+              color: 'rgba(255,255,255,0.8)',
+              textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+            }}>
+              {announcement.description}
+            </Typography>
+            
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Button 
+                variant="outlined" 
+                onClick={onClose}
+                sx={{
+                  borderRadius: '2rem',
+                  padding: '0.8rem 2rem',
+                  background: 'rgba(255,255,255,0.1)',
+                  backdropFilter: 'blur(5px)',
+                  border: '1px solid rgba(255,255,255,0.2)',
+                  color: 'white',
+                  fontWeight: 400,
+                  display: 'block',
+                  margin: '0 auto',
+                  '&:hover': {
+                    background: 'rgba(255,255,255,0.2)',
+                    border: '1px solid rgba(255,255,255,0.3)',
+                  }
+                }}
+              >
+                Close
+              </Button>
+            </motion.div>
+          </motion.div>
+        )}
+      </motion.div>
     )}
-  </motion.div>
+  </AnimatePresence>
 );
 
+// Timeline Node Component
+const TimelineNode = ({ 
+  title, 
+  description, 
+  icon, 
+  path, 
+  index, 
+  isAnnouncement = false,
+  onClick
+}: { 
+  title: string, 
+  description: string, 
+  icon: string, 
+  path?: string, 
+  index: number,
+  isAnnouncement?: boolean,
+  onClick?: () => void
+}) => {
+  const isEven = index % 2 === 0;
+  const { scrollYProgress } = useScroll();
+  const opacity = useTransform(
+    scrollYProgress, 
+    [0, 0.2 + index * 0.05, 0.3 + index * 0.05, 1], 
+    [0, 0, 1, 1]
+  );
+  
+  const Content = () => (
+    <motion.div
+      initial={{ opacity: 0, x: isEven ? -50 : 50 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ 
+        duration: 0.8, 
+        delay: index * 0.1,
+        type: "spring",
+        stiffness: 50
+      }}
+      whileHover={{ scale: 1.03, y: -5 }}
+      style={{ opacity }}
+    >
+      <Box
+        sx={{
+          background: 'rgba(0, 0, 0, 0.6)',
+          backdropFilter: 'blur(10px)',
+          p: 4,
+          borderRadius: '1rem',
+          width: { xs: '100%', md: '90%' },
+          ml: isEven ? { xs: 0, md: 'auto' } : 0,
+          mr: isEven ? 0 : { xs: 0, md: 'auto' },
+          position: 'relative',
+          overflow: 'hidden',
+          border: '1px solid rgba(255,255,255,0.1)',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '4px',
+            background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)',
+          }
+        }}
+      >
+        <Typography 
+          className="icon"
+          sx={{ 
+            fontSize: '3.5rem',
+            mb: 2,
+            transition: 'transform 0.4s ease',
+            display: 'block',
+            filter: 'drop-shadow(0 0 10px rgba(255,255,255,0.3))'
+          }}
+        >
+          {icon}
+        </Typography>
+        <Typography variant="h3" sx={{ 
+          mb: 2,
+          textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+          fontWeight: 600,
+          letterSpacing: '-0.02em',
+          color: 'rgba(255, 255, 255, 0.95)',
+          fontSize: { xs: '1.5rem', md: '2rem' }
+        }}>
+          {title}
+        </Typography>
+        <Typography variant="body1" sx={{ 
+          opacity: 0.9,
+          textShadow: '1px 1px 2px rgba(0,0,0,0.3)',
+          fontSize: '1.1rem',
+          lineHeight: 1.6,
+          color: 'rgba(255, 255, 255, 0.8)'
+        }}>
+          {description}
+        </Typography>
+        
+        {isAnnouncement && (
+          <Button 
+            variant="text" 
+            sx={{ 
+              mt: 2, 
+              alignSelf: 'flex-start',
+              color: 'primary.main',
+              border: '1px solid rgba(255,255,255,0.2)',
+              borderRadius: '10px',
+              padding: '8px 16px',
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                background: 'rgba(255,255,255,0.1)',
+                transform: 'translateY(-2px)'
+              }
+            }}
+            onClick={onClick}
+          >
+            Read More
+          </Button>
+        )}
+      </Box>
+    </motion.div>
+  );
+  
+  return (
+    <Box sx={{ 
+      position: 'relative',
+      mb: 10,
+      '&::after': {
+        content: '""',
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: '50%',
+        width: '2px',
+        background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.3), transparent)',
+        display: { xs: 'none', md: 'block' }
+      }
+    }}>
+      {path ? (
+        <Link to={path} style={{ textDecoration: 'none' }}>
+          <Content />
+        </Link>
+      ) : (
+        <div onClick={onClick}>
+          <Content />
+        </div>
+      )}
+      
+      <Box sx={{ 
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: '20px',
+        height: '20px',
+        borderRadius: '50%',
+        background: 'white',
+        boxShadow: '0 0 20px rgba(255,255,255,0.8)',
+        zIndex: 2,
+        display: { xs: 'none', md: 'block' }
+      }} />
+    </Box>
+  );
+};
+
+// Reimagined Home Component
 const Home = () => {
   const [selectedAnnouncement, setSelectedAnnouncement] = useState<Announcement | null>(null);
-
+  const { scrollYProgress } = useScroll();
+  const titleOpacity = useTransform(scrollYProgress, [0, 0.1], [1, 0]);
+  const titleY = useTransform(scrollYProgress, [0, 0.1], [0, -100]);
+  
   const announcements = [
     {
       id: 1,
@@ -169,9 +502,48 @@ const Home = () => {
       id: 3,
       title: "📒 KGHSK Batch Directory Initiative 📒",
       date: "Fillup the Form",
-      description: "We are creating a beautiful directory to keep track of our batchmates, know what they are up to, and stay connected. It’s a great way to find out how everyone is doing, where life has taken them, and celebrate their achievements! 🌟 To make this possible, we need your help! Please fill out the form and keep us posted about your current journey. Let’s strengthen our bond and keep our batch spirit alive! 💪",
+      description: "We are creating a beautiful directory to keep track of our batchmates, know what they are up to, and stay connected. It's a great way to find out how everyone is doing, where life has taken them, and celebrate their achievements! 🌟 To make this possible, we need your help! Please fill out the form and keep us posted about your current journey. Let's strengthen our bond and keep our batch spirit alive! 💪",
       icon: "🚀"
     }
+  ];
+  
+  const navigationSections = [
+    {
+      title: 'Directory',
+      path: '/directory',
+      description: 'Connect with fellow alumni',
+      icon: '👥'
+    },
+    { 
+      title: 'Events', 
+      path: '/events', 
+      description: 'Upcoming gatherings and meetups',
+      icon: '🎉'
+    },
+    { 
+      title: 'Forum', 
+      path: '/forum', 
+      description: 'Join the discussion',
+      icon: '💭'
+    },
+    { 
+      title: 'Gallery', 
+      path: '/gallery', 
+      description: 'Memories in pictures',
+      icon: '📸'
+    },
+    { 
+      title: 'Achievements', 
+      path: '/achievements', 
+      description: 'Celebrating our success',
+      icon: '🏆'
+    },
+    { 
+      title: 'Memoriam', 
+      path: '/memoriam', 
+      description: 'Remembering our friends',
+      icon: '🕊️'
+    },
   ];
 
   return (
@@ -180,272 +552,129 @@ const Home = () => {
         minHeight: '100vh',
         position: 'relative',
         overflow: 'hidden',
-        display: 'grid',
-        gridTemplateColumns: '1fr',
-        gridTemplateRows: 'auto 1fr auto',
-        gap: 4
       }}>
         <VideoBackground />
+        <ParticleField />
         
-        {/* Header Section - Reimagined as a side-scrolling banner */}
-        <Box sx={{ 
-          position: 'relative',
-          overflow: 'hidden',
-          height: '100vh',
-          display: 'flex',
-          alignItems: 'center'
-        }}>
+        {/* Immersive Header */}
+        <motion.div
+          style={{ 
+            opacity: titleOpacity,
+            y: titleY,
+            position: 'relative',
+            height: '100vh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexDirection: 'column',
+            padding: '0 2rem',
+          }}
+        >
           <motion.div
-            initial={{ x: '100%' }}
-            animate={{ x: '0%' }}
-            transition={{ duration: 1.2, ease: "easeOut" }}
-            style={{ width: '100%' }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.5, type: 'spring' }}
           >
             <Typography 
               variant="h1" 
               sx={{ 
                 fontSize: 'clamp(3rem, 15vw, 12rem)',
-                textAlign: 'left',
-                mb: 2,
-                pl: 4,
-                background: 'linear-gradient(45deg, #ffffff, transparent)',
+                textAlign: 'center',
+                background: 'linear-gradient(45deg, #ffffff, #aaaaaa)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
-                transform: 'translateX(-5%)'
+                textShadow: '0 10px 30px rgba(0,0,0,0.5)',
+                fontWeight: 600,
+                letterSpacing: '-0.05em',
+                mb: 2
               }}
             >
               Batch Sixteenz
             </Typography>
           </motion.div>
-        </Box>
-
-        {/* Dynamic Grid Layout for Updates and Navigation */}
-        <Box sx={{ 
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-          gap: 3,
-          p: 4,
-          position: 'relative'
-        }}>
-          {/* Latest Updates - As floating cards */}
+          
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.5 }}
+          >
+            <Typography 
+              variant="h2" 
+              sx={{ 
+                textAlign: 'center',
+                color: 'rgba(255,255,255,0.7)',
+                maxWidth: '800px',
+                mx: 'auto',
+                fontWeight: 300,
+                letterSpacing: '0.05em',
+              }}
+            >
+              A JOURNEY THROUGH TIME
+            </Typography>
+          </motion.div>
+          
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 1.5 }}
             style={{
-              gridColumn: '1 / -1',
-              marginBottom: '4rem'
+              position: 'absolute',
+              bottom: '10%',
+              left: '50%',
+              transform: 'translateX(-50%)',
             }}
           >
-            <Box sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 4
-            }}>
-              {announcements.map((announcement, index) => (
-                <motion.div
-                  key={announcement.id}
-                  initial={{ x: index % 2 === 0 ? -100 : 100, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ 
-                    duration: 0.8,
-                    delay: index * 0.2,
-                    type: "spring",
-                    stiffness: 50
-                  }}
-                >
-                  <Box
-                    sx={{
-                      background: 'rgba(0, 0, 0, 0.4)',
-                      p: 4,
-                      borderRadius: '30px',
-                      ml: index % 2 === 0 ? 0 : 'auto',
-                      width: { xs: '100%', md: '80%' },
-                      transform: `rotate(${index % 2 === 0 ? '-2' : '2'}deg)`,
-                      '&:hover': {
-                        transform: 'rotate(0deg) scale(1.02)',
-                      }
-                    }}
-                    onClick={() => setSelectedAnnouncement(announcement)}
-                  >
-                    <Typography 
-                      className="icon"
-                      sx={{ 
-                        fontSize: '3.5rem',
-                        mb: 2,
-                        transition: 'transform 0.4s ease',
-                        display: 'block'
-                      }}
-                    >
-                      {announcement.icon}
-                    </Typography>
-                    <Typography variant="h3" sx={{ 
-                      mb: 2,
-                      textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
-                      fontWeight: 600,
-                      letterSpacing: '-0.02em',
-                      color: 'rgba(255, 255, 255, 0.95)'
-                    }}>
-                      {announcement.title}
-                    </Typography>
-                    <Typography variant="body2" sx={{ 
-                      opacity: 0.7,
-                      mb: 2,
-                      textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
-                    }}>
-                      {announcement.date}
-                    </Typography>
-                    <Typography variant="body1" sx={{ 
-                      opacity: 0.9,
-                      textShadow: '1px 1px 2px rgba(0,0,0,0.3)',
-                      fontSize: '1.1rem',
-                      lineHeight: 1.6,
-                      color: 'rgba(255, 255, 255, 0.8)'
-                    }}>
-                      {announcement.description.substring(0, 100)}...
-                    </Typography>
-                    <Button 
-                      variant="text" 
-                      sx={{ 
-                        mt: 'auto', 
-                        alignSelf: 'flex-start',
-                        color: 'primary.main',
-                        border: '1px solid rgba(255,255,255,0.2)',
-                        borderRadius: '10px',
-                        padding: '8px 16px',
-                        transition: 'all 0.3s ease',
-                        '&:hover': {
-                          background: 'rgba(255,255,255,0.1)',
-                          transform: 'translateY(-2px)'
-                        }
-                      }}
-                      onClick={() => setSelectedAnnouncement(announcement)}
-                    >
-                      Read More
-                    </Button>
-                  </Box>
-                </motion.div>
-              ))}
-            </Box>
-          </motion.div>
-
-          {/* Navigation Sections - As interactive tiles */}
-          {[
-            {
-              title: 'Directory',
-              path: '/directory',  // <-- Correct the path here
-              description: 'Connect with fellow alumni',
-              icon: '👥'
-            },
-            { 
-              title: 'Events', 
-              path: '/events', 
-              description: 'Upcoming gatherings and meetups',
-              icon: '🎉'
-            },
-            { 
-              title: 'Forum', 
-              path: '/forum', 
-              description: 'Join the discussion',
-              icon: '💭'
-            },
-            { 
-              title: 'Gallery', 
-              path: '/gallery', 
-              description: 'Memories in pictures',
-              icon: '📸'
-            },
-            { 
-              title: 'Achievements', 
-              path: '/achievements', 
-              description: 'Celebrating our success',
-              icon: '🏆'
-            },
-            { 
-              title: 'Memoriam', 
-              path: '/memoriam', 
-              description: 'Remembering our friends',
-              icon: '🕊️'
-            },
-          ].map((section, index) => (
-            <motion.div
-              key={section.title}
-              initial={{ 
-                opacity: 0,
-                rotateY: 180,
-                scale: 0.8
-              }}
-              animate={{ 
-                opacity: 1,
-                rotateY: 0,
-                scale: 1
-              }}
-              transition={{
-                duration: 0.8,
-                delay: index * 0.1,
-                type: "spring",
-                stiffness: 80
-              }}
-              whileHover={{
-                scale: 1.05,
-                rotateY: 10,
-                transition: { duration: 0.4 }
+            <Typography 
+              variant="body1" 
+              sx={{ 
+                color: 'rgba(255,255,255,0.6)',
+                textAlign: 'center',
+                animation: 'bounce 2s infinite',
+                '@keyframes bounce': {
+                  '0%, 20%, 50%, 80%, 100%': { transform: 'translateY(0)' },
+                  '40%': { transform: 'translateY(-20px)' },
+                  '60%': { transform: 'translateY(-10px)' }
+                }
               }}
             >
-              <Link to={section.path} style={{ textDecoration: 'none' }}>
-                <Box sx={{
-                  background: 'rgba(0, 0, 0, 0.4)',
-                  aspectRatio: '1',
-                  p: 3,
-                  borderRadius: '20px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  textAlign: 'center',
-                  perspective: '1000px',
-                  transformStyle: 'preserve-3d',
-                  '&:hover': {
-                    '& .icon': {
-                      transform: 'translateZ(20px) scale(1.2)',
-                    }
-                  }
-                }}>
-                  <Typography 
-                    className="icon"
-                    sx={{ 
-                      fontSize: '3.5rem',
-                      mb: 2,
-                      transition: 'transform 0.4s ease',
-                      display: 'block'
-                    }}
-                  >
-                    {section.icon}
-                  </Typography>
-                  <Typography variant="h3" sx={{ 
-                    mb: 2,
-                    textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
-                    fontWeight: 600,
-                    letterSpacing: '-0.02em',
-                    color: 'rgba(255, 255, 255, 0.95)'
-                  }}>
-                    {section.title}
-                  </Typography>
-                  <Typography variant="body1" sx={{ 
-                    opacity: 0.9,
-                    textShadow: '1px 1px 2px rgba(0,0,0,0.3)',
-                    fontSize: '1.1rem',
-                    lineHeight: 1.6,
-                    color: 'rgba(255, 255, 255, 0.8)'
-                  }}>
-                    {section.description}
-                  </Typography>
-                </Box>
-              </Link>
-            </motion.div>
-          ))}
-        </Box>
-
-        {/* Modal remains unchanged */}
+              Scroll to explore our timeline
+              <br />
+              ↓
+            </Typography>
+          </motion.div>
+        </motion.div>
+        
+        {/* Timeline Journey */}
+        <Container maxWidth="lg" sx={{ pt: 20, pb: 20 }}>
+          <Box sx={{ position: 'relative' }}>
+            {/* Announcements */}
+            {announcements.map((announcement, index) => (
+              <TimelineNode
+                key={`announcement-${announcement.id}`}
+                title={announcement.title}
+                description={announcement.description.substring(0, 120) + '...'}
+                icon={announcement.icon}
+                index={index}
+                isAnnouncement={true}
+                onClick={() => setSelectedAnnouncement(announcement)}
+              />
+            ))}
+            
+            {/* Navigation Sections */}
+            {navigationSections.map((section, index) => (
+              <TimelineNode
+                key={`section-${section.title}`}
+                title={section.title}
+                description={section.description}
+                icon={section.icon}
+                path={section.path}
+                index={index + announcements.length}
+              />
+            ))}
+          </Box>
+        </Container>
+        
+        {/* 3D Modal */}
         <AnnouncementModal
           announcement={selectedAnnouncement}
           open={selectedAnnouncement !== null}

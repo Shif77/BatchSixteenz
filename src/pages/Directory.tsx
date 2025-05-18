@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, MoreHorizontal, MapPin, Calendar, Droplet, Mail, Phone, Edit3, X, Github, Linkedin, Twitter, Instagram, Briefcase } from 'lucide-react';
+import { Search, MapPin, Calendar, Droplet, Mail, Phone, Edit3, X, Github, Linkedin, Twitter, Instagram, Briefcase } from 'lucide-react';
 
 interface BatchMate {
   id: number;
@@ -77,13 +77,52 @@ const Directory: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black relative">
-      {/* Subtle Background Pattern */}
-      <div className="fixed inset-0 opacity-[0.02]">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
-          backgroundSize: '40px 40px'
-        }}></div>
+    <div className="min-h-screen relative bg-black overflow-hidden">
+      {/* Animated Gradient Background */}
+      <div className="fixed inset-0 opacity-40">
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-black to-blue-900/30 animate-gradient"></div>
+      </div>
+      
+      {/* Floating Particles */}
+      <div className="fixed inset-0 opacity-30">
+        <div id="particles-js" className="absolute inset-0"></div>
+      </div>
+      
+      {/* Glowing Orbs */}
+      <div className="fixed inset-0 overflow-hidden">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div 
+            key={i}
+            className={`absolute rounded-full blur-3xl animate-float-${i+1}`}
+            style={{
+              width: `${Math.random() * 300 + 100}px`,
+              height: `${Math.random() * 300 + 100}px`,
+              background: `radial-gradient(circle, rgba(${Math.floor(Math.random() * 100)}, ${Math.floor(Math.random() * 100)}, ${Math.floor(Math.random() * 255)}, 0.15), transparent 70%)`,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 5}s`,
+              animationDuration: `${Math.random() * 10 + 20}s`
+            }}
+          />
+        ))}
+      </div>
+      
+      {/* Digital Circuit Lines */}
+      <div className="fixed inset-0 opacity-10">
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="circuit-pattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+              <path d="M10 10 H90 V90 H10 Z" fill="none" stroke="#4F46E5" strokeWidth="0.5" />
+              <circle cx="10" cy="10" r="2" fill="#4F46E5" />
+              <circle cx="90" cy="90" r="2" fill="#4F46E5" />
+              <path d="M10 50 H40 V90" fill="none" stroke="#4F46E5" strokeWidth="0.5" />
+              <path d="M50 10 V40 H90" fill="none" stroke="#4F46E5" strokeWidth="0.5" />
+              <circle cx="40" cy="90" r="2" fill="#4F46E5" />
+              <circle cx="90" cy="40" r="2" fill="#4F46E5" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#circuit-pattern)" />
+        </svg>
       </div>
 
       {/* Header */}
@@ -91,7 +130,7 @@ const Directory: React.FC = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center">
             <h1 className="text-5xl font-light text-white mb-3 tracking-tight">
-              Professional Directory
+              Batch 16 Directory
             </h1>
             <div className="w-24 h-px bg-gradient-to-r from-transparent via-zinc-600 to-transparent mx-auto mb-8"></div>
             <p className="text-zinc-400 text-lg font-light max-w-2xl mx-auto leading-relaxed">
@@ -138,10 +177,7 @@ const Directory: React.FC = () => {
                   animationDelay: `${index * 100}ms`
                 }}
               >
-                <div className="relative bg-gradient-to-b from-zinc-900/90 to-zinc-900/70 backdrop-blur-sm border border-zinc-800 hover:border-zinc-700 transition-all duration-300 overflow-hidden h-full">
-                  {/* Hover Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-zinc-800/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  
+                <div className="relative bg-gradient-to-b from-zinc-900/30 to-zinc-900/20 backdrop-blur-md border border-zinc-800/50 hover:border-zinc-700/70 transition-all duration-300 overflow-hidden h-full">
                   {/* Content */}
                   <div className="relative p-6">
                     {/* Profile Section */}
@@ -152,9 +188,7 @@ const Directory: React.FC = () => {
                           alt={mate.name}
                           className="w-full h-full object-cover rounded-full border-2 border-zinc-700 group-hover:border-zinc-600 transition-colors duration-300"
                         />
-                        <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-zinc-600/20 to-transparent group-hover:opacity-0 transition-opacity duration-300"></div>
                       </div>
-                      
                       <div className="text-center">
                         <h3 className="text-white font-medium text-lg mb-1 group-hover:text-zinc-200 transition-colors duration-300">
                           {mate.name}
@@ -164,7 +198,6 @@ const Directory: React.FC = () => {
                         </p>
                       </div>
                     </div>
-
                     {/* Minimal Info */}
                     <div className="space-y-2 mb-6">
                       <div className="flex items-center text-zinc-500 text-sm">
@@ -172,22 +205,13 @@ const Directory: React.FC = () => {
                         <span className="font-light truncate">{mate.location}</span>
                       </div>
                     </div>
-
                     {/* Social Links */}
                     <div className="flex justify-center space-x-3">
                       {Object.entries(mate.socialMedia).map(([platform, url]) => (
                         <SocialIcon key={platform} platform={platform} url={url} />
                       ))}
                     </div>
-
-                    {/* Subtle Action Indicator */}
-                    <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <MoreHorizontal size={16} className="text-zinc-600" />
-                    </div>
                   </div>
-
-                  {/* Bottom Border Animation */}
-                  <div className="absolute bottom-0 left-0 w-0 h-px bg-gradient-to-r from-zinc-600 to-zinc-500 group-hover:w-full transition-all duration-500 ease-out"></div>
                 </div>
               </div>
             ))}
@@ -277,16 +301,7 @@ const Directory: React.FC = () => {
                 </div>
               </div>
 
-              {/* Actions */}
-              <div className="text-center">
-                <button 
-                  onClick={() => setIsEditing(selectedMate.id)}
-                  className="inline-flex items-center px-6 py-3 bg-white text-black hover:bg-zinc-100 transition-all duration-200 font-medium"
-                >
-                  <Edit3 size={16} className="mr-2" />
-                  Edit Profile
-                </button>
-              </div>
+              {/* Remove the Actions section with the Edit Profile button */}
             </div>
           </div>
         </div>
@@ -308,6 +323,48 @@ const Directory: React.FC = () => {
           .slide-up-animation {
             animation: slideUp 0.6s ease-out forwards;
           }
+          
+          @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+          }
+          .animate-gradient {
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+          }
+          
+          @keyframes float-1 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(50px, 25px) rotate(90deg); }
+            50% { transform: translate(0, 50px) rotate(180deg); }
+            75% { transform: translate(-50px, 25px) rotate(270deg); }
+          }
+          @keyframes float-2 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(-30px, 40px) rotate(-45deg); }
+            50% { transform: translate(0, 80px) rotate(-90deg); }
+            75% { transform: translate(30px, 40px) rotate(-135deg); }
+          }
+          @keyframes float-3 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(25px, -25px) rotate(45deg); }
+            66% { transform: translate(-25px, -25px) rotate(-45deg); }
+          }
+          @keyframes float-4 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(15px, 15px) scale(1.1); }
+          }
+          @keyframes float-5 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-15px, -15px) scale(0.9); }
+          }
+          
+          .animate-float-1 { animation: float-1 25s ease-in-out infinite; }
+          .animate-float-2 { animation: float-2 30s ease-in-out infinite; }
+          .animate-float-3 { animation: float-3 35s ease-in-out infinite; }
+          .animate-float-4 { animation: float-4 20s ease-in-out infinite; }
+          .animate-float-5 { animation: float-5 22s ease-in-out infinite; }
         `
       }} />
     </div>

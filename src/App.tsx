@@ -4,6 +4,12 @@ import { ThemeProvider, createTheme } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Typography, Box, Container, Button, Grid } from '@mui/material';
+import Directory from './pages/Directory';
+import Events from './pages/Events';
+import Forum from './pages/Forum';
+import Gallery from './pages/Gallery';
+import Achievements from './pages/Achievements';
+import Memoriam from './pages/Memoriam';
 
 const theme = createTheme({
   palette: {
@@ -147,23 +153,23 @@ const Home = () => {
   const announcements = [
     {
       id: 1,
-      title: "Batch 16 Reunion",
-      date: "December 15, 2023",
-      description: "Join us for an unforgettable evening of reconnection and celebration at the Grand Skyline Hotel. The event will feature dinner, live music, and special presentations from our distinguished alumni. Don't miss this opportunity to reunite with your classmates and share memories from our university days.",
+      title: "Football Tournament",
+      date: "June 6, 2025",
+      description: "The KGHSK Batch Football Tournament is an exciting and spirited event that brings together alumni from various batches of KGHSK to compete in the beautiful game. Teams formed by batchmates showcase their football skills, camaraderie, and sportsmanship on the field. The tournament fosters a sense of unity and nostalgia, as old friends reconnect and create new memories. With thrilling matches and passionate support from the sidelines, it promises to be a celebration of both football and lifelong friendships. Get ready to cheer for your batch and witness unforgettable moments!",
       icon: "🎉"
     },
     {
       id: 2,
-      title: "Career Opportunities",
-      date: "November 30, 2023",
-      description: "Multiple positions available at leading tech companies. Our alumni network has exclusive access to senior positions in software development, project management, and system architecture roles. Visit the forum section for detailed job descriptions and application procedures.",
+      title: "🚩 Jersey Design Competition Alert! 🚩",
+      date: "June 5, 2025",
+      description: "As the KGHSK Batch Football Tournament approaches, it's time to gear up and make a statement on the field! We need an extraordinary jersey that truly represents the spirit of our batch.🏆 🎨 Participate in the Jersey Design Competition and showcase your creativity! The winning design will not only be featured during the tournament but also earn you an exciting prize. Don't miss this chance to make your mark! Submit your designs now and let your creativity shine! 🌟 ",
       icon: "💼"
     },
     {
       id: 3,
-      title: "Community Project Launch",
-      date: "January 5, 2024",
-      description: "We're launching a mentorship program for current AAU students. Share your expertise and help shape the next generation of professionals. The program includes monthly mentoring sessions, workshop opportunities, and networking events.",
+      title: "📒 KGHSK Batch Directory Initiative 📒",
+      date: "Fillup the Form",
+      description: "We are creating a beautiful directory to keep track of our batchmates, know what they are up to, and stay connected. It’s a great way to find out how everyone is doing, where life has taken them, and celebrate their achievements! 🌟 To make this possible, we need your help! Please fill out the form and keep us posted about your current journey. Let’s strengthen our bond and keep our batch spirit alive! 💪",
       icon: "🚀"
     }
   ];
@@ -324,9 +330,9 @@ const Home = () => {
 
           {/* Navigation Sections - As interactive tiles */}
           {[
-            { 
-              title: 'Directory', 
-              path: '/directory', 
+            {
+              title: 'Directory',
+              path: '/directory',  // <-- Correct the path here
               description: 'Connect with fellow alumni',
               icon: '👥'
             },
@@ -451,14 +457,15 @@ const Home = () => {
 };
 
 // Create placeholder pages for each section
-const Directory = () => <div>Directory Page</div>;
-const Events = () => <div>Events Page</div>;
-const Forum = () => <div>Forum Page</div>;
-const Gallery = () => <div>Gallery Page</div>;
-const Achievements = () => <div>Achievements Page</div>;
-const Memoriam = () => <div>Memoriam Page</div>;
+// Remove or replace this placeholder
+// const Directory = () => <div>Directory Page</div>;
+
+// Import the actual Directory component
+
 
 const App = () => {
+  const [darkMode, setDarkMode] = useState(false);
+  
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

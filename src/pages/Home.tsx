@@ -10,16 +10,6 @@ const Home: React.FC = () => {
       title: "Batchmate Directory",
       description: "Connect with your classmates and stay in touch with their current endeavors.",
       link: "/directory"
-    },
-    {
-      title: "Events & Reunions",
-      description: "Stay updated with upcoming gatherings and never miss a reunion.",
-      link: "/events"
-    },
-    {
-      title: "Photo Gallery",
-      description: "Relive memories through our collection of photos from school days to recent meetups.",
-      link: "/gallery"
     }
   ];
 

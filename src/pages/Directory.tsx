@@ -1,136 +1,316 @@
-import React, { useState } from 'react';
-import { Container, Card, CardContent, Typography, TextField, Box, Avatar } from '@mui/material';
-import Navbar from '../components/Navbar';
+import React, { useState, useEffect } from 'react';
+import { Search, MoreHorizontal, MapPin, Calendar, Droplet, Mail, Phone, Edit3, X, Github, Linkedin, Twitter, Instagram, Briefcase } from 'lucide-react';
 
 interface BatchMate {
+  id: number;
   name: string;
   picture: string;
-  location: string;
-  profession: string;
-  birthdate: string;
+  dob: string;
   bloodGroup: string;
-  contact: string;
+  description: string;
+  socialMedia: {
+    instagram?: string;
+    twitter?: string;
+    linkedin?: string;
+    github?: string;
+  };
+  email?: string;
+  phone?: string;
+  profession?: string;
+  location?: string;
 }
 
 const Directory: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [darkMode, setDarkMode] = useState(false);
+  const [selectedMate, setSelectedMate] = useState<BatchMate | null>(null);
+  const [isEditing, setIsEditing] = useState<number | null>(null);
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
 
-  // Sample data - replace with actual data from backend
-  const batchmates: BatchMate[] = Array.from({ length: 264 }, (_, i) => ({
-    name: `Batchmate ${i + 1}`,
-    picture: '', // Removed non-existent image paths
-    location: `City ${i + 1}`,
-    profession: `Profession ${i + 1}`,
-    birthdate: `199${i % 10}-0${(i % 9) + 1}-1${(i % 9) + 1}`,
-    bloodGroup: i % 4 === 0 ? 'A+' : i % 4 === 1 ? 'B+' : i % 4 === 2 ? 'O+' : 'AB+',
-    contact: `batchmate${i + 1}@example.com`,
-  }));
-
-  const filteredBatchmates = batchmates.filter(mate =>
-    mate.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    mate.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    mate.profession.toLowerCase().includes(searchTerm.toLowerCase())
+  // Sample data for 50 people
+  const [batchmates, setBatchmates] = useState<BatchMate[]>(
+    Array.from({ length: 50 }, (_, i) => ({
+      id: i + 1,
+      name: `Alexandra Chen ${i + 1}`,
+      picture: `/api/placeholder/150/150`,
+      dob: `199${i % 10}-0${(i % 9) + 1}-1${(i % 9) + 1}`,
+      bloodGroup: i % 4 === 0 ? 'A+' : i % 4 === 1 ? 'B+' : i % 4 === 2 ? 'O+' : 'AB+',
+      description: `Senior ${i % 3 === 0 ? 'Product Manager' : i % 3 === 1 ? 'Design Director' : 'Technology Lead'} with extensive experience in digital transformation and strategic innovation. Passionate about creating meaningful solutions that drive business growth and enhance user experiences.`,
+      socialMedia: {
+        instagram: `https://instagram.com/alex${i + 1}`,
+        twitter: `https://twitter.com/alex${i + 1}`,
+        linkedin: `https://linkedin.com/in/alex${i + 1}`,
+        github: i % 2 === 0 ? `https://github.com/alex${i + 1}` : undefined,
+      },
+      email: `alexandra.chen${i + 1}@company.com`,
+      phone: `+1 (555) 123-${String(i + 1).padStart(4, '0')}`,
+      profession: i % 3 === 0 ? 'Senior Product Manager' : i % 3 === 1 ? 'Design Director' : 'Technology Lead',
+      location: `${['New York', 'San Francisco', 'London', 'Toronto', 'Sydney'][i % 5]}, ${['USA', 'USA', 'UK', 'Canada', 'Australia'][i % 5]}`,
+    }))
   );
 
-  return (
-    <>
-      <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
-      <Box sx={{ 
-        pt: 10, // Add padding top to account for the navbar
-        minHeight: '100vh',
-        bgcolor: darkMode ? '#121212' : '#f5f5f5'
-      }}>
-        <Container maxWidth="lg" sx={{ py: 4 }}>
-          <Typography variant="h4" gutterBottom sx={{ 
-            textAlign: 'center', 
-            mb: 4, 
-            fontWeight: 600,
-            color: darkMode ? 'white' : 'inherit'
-          }}>
-            Batch 16 Directory
-          </Typography>
+  const filteredBatchmates = batchmates.filter(mate =>
+    mate.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-          <Box sx={{ mb: 4, textAlign: 'center' }}>
-            <TextField
-              fullWidth
-              label="Search batchmates by name, location, or profession..."
-              variant="outlined"
+  const SocialIcon = ({ platform, url }: { platform: string; url?: string }) => {
+    if (!url) return null;
+    
+    const icons = {
+      instagram: Instagram,
+      twitter: Twitter,
+      linkedin: Linkedin,
+      github: Github,
+    };
+    
+    const Icon = icons[platform as keyof typeof icons];
+    
+    return (
+      <a 
+        href={url} 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 transition-all duration-200 group"
+      >
+        <Icon size={16} className="text-zinc-600 group-hover:text-zinc-800 transition-colors duration-200" />
+      </a>
+    );
+  };
+
+  return (
+    <div className="min-h-screen bg-black relative">
+      {/* Subtle Background Pattern */}
+      <div className="fixed inset-0 opacity-[0.02]">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
+          backgroundSize: '40px 40px'
+        }}></div>
+      </div>
+
+      {/* Header */}
+      <div className="relative z-10 px-6 py-12">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center">
+            <h1 className="text-5xl font-light text-white mb-3 tracking-tight">
+              Professional Directory
+            </h1>
+            <div className="w-24 h-px bg-gradient-to-r from-transparent via-zinc-600 to-transparent mx-auto mb-8"></div>
+            <p className="text-zinc-400 text-lg font-light max-w-2xl mx-auto leading-relaxed">
+              Connect with exceptional professionals from our distinguished cohort, 
+              building meaningful relationships across industries and borders.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Search */}
+      <div className="relative z-10 px-6 mb-16">
+        <div className="max-w-xl mx-auto">
+          <div className="relative">
+            <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+              <Search className="text-zinc-500" size={20} />
+            </div>
+            <input
+              type="text"
+              placeholder="Search professionals..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              sx={{ maxWidth: 600, mx: 'auto' }}
+              className="w-full pl-12 pr-4 py-4 bg-zinc-900/80 border border-zinc-800 text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-600 focus:bg-zinc-900/90 transition-all duration-200 text-sm"
             />
-          </Box>
+            <div className="absolute right-4 top-1/2 transform -translate-y-1/2 text-zinc-600 text-sm">
+              {filteredBatchmates.length} members
+            </div>
+          </div>
+        </div>
+      </div>
 
-          <Box
-            sx={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'center',
-              gap: 3,
-            }}
-          >
+      {/* Cards Grid */}
+      <div className="relative z-10 px-6 pb-20">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {filteredBatchmates.map((mate, index) => (
-              <Box
-                key={index}
-                sx={{
-                  flex: '1 1 calc(25% - 1rem)',
-                  minWidth: 250,
-                  maxWidth: 300,
-                  p: 1,
-                  transition: 'transform 0.2s ease-in-out',
-                  '&:hover': { transform: 'scale(1.03)' },
+              <div
+                key={mate.id}
+                onClick={() => setSelectedMate(mate)}
+                onMouseEnter={() => setHoveredCard(mate.id)}
+                onMouseLeave={() => setHoveredCard(null)}
+                className="group cursor-pointer slide-up-animation"
+                style={{
+                  animationDelay: `${index * 100}ms`
                 }}
               >
-                <Card
-                  sx={{
-                    height: '100%',
-                    background: 'linear-gradient(145deg, #e0e0e0, #f5f5f5)',
-                    borderRadius: 3,
-                    boxShadow: '4px 4px 10px rgba(0,0,0,0.1)',
-                  }}
-                >
-                  <CardContent
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      textAlign: 'center',
-                      p: 3,
-                    }}
-                  >
-                    <Avatar
-                      alt={mate.name}
-                      sx={{ width: 90, height: 90, mb: 2, border: '2px solid #ddd' }}
-                    >
-                      {mate.name.charAt(0)}
-                    </Avatar>
-                    <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                      {mate.name}
-                    </Typography>
-                    <Typography color="textSecondary" sx={{ mb: 1 }}>
-                      {mate.profession}
-                    </Typography>
-                    <Typography sx={{ fontSize: '0.9rem', mb: 1 }}>
-                      📍 {mate.location}
-                    </Typography>
-                    <Typography sx={{ fontSize: '0.9rem', mb: 1 }}>
-                      🎂 {mate.birthdate}
-                    </Typography>
-                    <Typography sx={{ fontSize: '0.9rem', mb: 1 }}>
-                      🩸 {mate.bloodGroup}
-                    </Typography>
-                    <Typography sx={{ fontSize: '0.9rem', color: '#555' }}>
-                      📧 {mate.contact}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Box>
+                <div className="relative bg-gradient-to-b from-zinc-900/90 to-zinc-900/70 backdrop-blur-sm border border-zinc-800 hover:border-zinc-700 transition-all duration-300 overflow-hidden h-full">
+                  {/* Hover Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-zinc-800/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  
+                  {/* Content */}
+                  <div className="relative p-6">
+                    {/* Profile Section */}
+                    <div className="mb-6">
+                      <div className="relative w-16 h-16 mx-auto mb-4">
+                        <img
+                          src={mate.picture}
+                          alt={mate.name}
+                          className="w-full h-full object-cover rounded-full border-2 border-zinc-700 group-hover:border-zinc-600 transition-colors duration-300"
+                        />
+                        <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-zinc-600/20 to-transparent group-hover:opacity-0 transition-opacity duration-300"></div>
+                      </div>
+                      
+                      <div className="text-center">
+                        <h3 className="text-white font-medium text-lg mb-1 group-hover:text-zinc-200 transition-colors duration-300">
+                          {mate.name}
+                        </h3>
+                        <p className="text-zinc-400 text-sm font-light">
+                          {mate.profession}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Minimal Info */}
+                    <div className="space-y-2 mb-6">
+                      <div className="flex items-center text-zinc-500 text-sm">
+                        <MapPin size={14} className="mr-2 flex-shrink-0" />
+                        <span className="font-light truncate">{mate.location}</span>
+                      </div>
+                    </div>
+
+                    {/* Social Links */}
+                    <div className="flex justify-center space-x-3">
+                      {Object.entries(mate.socialMedia).map(([platform, url]) => (
+                        <SocialIcon key={platform} platform={platform} url={url} />
+                      ))}
+                    </div>
+
+                    {/* Subtle Action Indicator */}
+                    <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <MoreHorizontal size={16} className="text-zinc-600" />
+                    </div>
+                  </div>
+
+                  {/* Bottom Border Animation */}
+                  <div className="absolute bottom-0 left-0 w-0 h-px bg-gradient-to-r from-zinc-600 to-zinc-500 group-hover:w-full transition-all duration-500 ease-out"></div>
+                </div>
+              </div>
             ))}
-          </Box>
-        </Container>
-      </Box>
-    </>
+          </div>
+        </div>
+      </div>
+
+      {/* Detailed Modal */}
+      {selectedMate && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-50 p-6">
+          <div className="bg-gradient-to-b from-zinc-900 to-zinc-950 border border-zinc-800 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            {/* Close Button */}
+            <button
+              onClick={() => setSelectedMate(null)}
+              className="absolute top-6 right-6 p-2 text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50 transition-all duration-200"
+            >
+              <X size={20} />
+            </button>
+
+            {/* Content */}
+            <div className="p-8">
+              {/* Header */}
+              <div className="flex flex-col md:flex-row items-start space-y-6 md:space-y-0 md:space-x-8 mb-8">
+                <div className="relative">
+                  <img
+                    src={selectedMate.picture}
+                    alt={selectedMate.name}
+                    className="w-28 h-28 object-cover rounded-full border-2 border-zinc-700"
+                  />
+                </div>
+                <div className="flex-1">
+                  <h2 className="text-3xl font-light text-white mb-2">
+                    {selectedMate.name}
+                  </h2>
+                  <div className="flex items-center text-zinc-400 mb-4">
+                    <Briefcase size={16} className="mr-2" />
+                    <span className="font-light">{selectedMate.profession}</span>
+                  </div>
+                  <div className="flex items-center text-zinc-500">
+                    <MapPin size={16} className="mr-2" />
+                    <span className="font-light">{selectedMate.location}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Information Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                {[
+                  { icon: Calendar, label: 'Date of Birth', value: selectedMate.dob },
+                  { icon: Droplet, label: 'Blood Group', value: selectedMate.bloodGroup },
+                  { icon: Mail, label: 'Email', value: selectedMate.email },
+                  { icon: Phone, label: 'Phone', value: selectedMate.phone },
+                ].map(({ icon: Icon, label, value }) => (
+                  <div key={label} className="border border-zinc-800 p-4 bg-zinc-900/50">
+                    <div className="flex items-center mb-2">
+                      <Icon className="text-zinc-500 mr-3" size={18} />
+                      <span className="text-zinc-400 text-sm font-light">{label}</span>
+                    </div>
+                    <div className="text-white font-light">{value}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* About Section */}
+              <div className="border border-zinc-800 p-6 bg-zinc-900/50 mb-8">
+                <h3 className="text-white font-medium text-lg mb-4">About</h3>
+                <p className="text-zinc-300 leading-relaxed font-light">
+                  {selectedMate.description}
+                </p>
+              </div>
+
+              {/* Professional Network */}
+              <div className="border border-zinc-800 p-6 bg-zinc-900/50 mb-8">
+                <h3 className="text-white font-medium text-lg mb-4">Professional Network</h3>
+                <div className="flex justify-center space-x-4">
+                  {Object.entries(selectedMate.socialMedia).map(([platform, url]) => (
+                    <a
+                      key={platform}
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center px-4 py-2 border border-zinc-700 text-zinc-300 hover:border-zinc-600 hover:text-white transition-all duration-200 text-sm font-light"
+                    >
+                      {platform.charAt(0).toUpperCase() + platform.slice(1)}
+                    </a>
+                  ))}
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="text-center">
+                <button 
+                  onClick={() => setIsEditing(selectedMate.id)}
+                  className="inline-flex items-center px-6 py-3 bg-white text-black hover:bg-zinc-100 transition-all duration-200 font-medium"
+                >
+                  <Edit3 size={16} className="mr-2" />
+                  Edit Profile
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Inline styles for animations */}
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          @keyframes slideUp {
+            0% { 
+              opacity: 0; 
+              transform: translateY(30px);
+            }
+            100% { 
+              opacity: 1; 
+              transform: translateY(0);
+            }
+          }
+          .slide-up-animation {
+            animation: slideUp 0.6s ease-out forwards;
+          }
+        `
+      }} />
+    </div>
   );
 };
 

@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react
 import { ThemeProvider, createTheme } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
-import { Typography, Box, Container, Button, Grid, IconButton } from '@mui/material';
+import { Typography, Box, Container, Button, Grid, IconButton, Card, CardContent } from '@mui/material';
 import Directory from './pages/Directory';
 import Events from './pages/Events';
 import Forum from './pages/Forum';
@@ -239,8 +239,7 @@ const AnnouncementModal = ({ announcement, open, onClose }: AnnouncementModalPro
               width: '90%',
               border: '1px solid rgba(255,255,255,0.1)',
               boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
-              position: 'relative',
-              transformStyle: 'preserve-3d',
+              position: 'relative'
             }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -467,6 +466,7 @@ const TimelineNode = ({
         width: '20px',
         height: '20px',
         borderRadius: '50%',
+      
         background: 'white',
         boxShadow: '0 0 20px rgba(255,255,255,0.8)',
         zIndex: 2,
@@ -476,33 +476,139 @@ const TimelineNode = ({
   );
 };
 
-// Reimagined Home Component
+// Reimagined Home Component with Professional X-Factor
 const Home = () => {
   const [selectedAnnouncement, setSelectedAnnouncement] = useState<Announcement | null>(null);
+  const [activeSection, setActiveSection] = useState(0);
   const { scrollYProgress } = useScroll();
   const titleOpacity = useTransform(scrollYProgress, [0, 0.1], [1, 0]);
   const titleY = useTransform(scrollYProgress, [0, 0.1], [0, -100]);
+  
+  // Top Navigation Bar
+  const TopNavBar = () => {
+    return (
+      <Box
+        sx={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 100,
+          background: 'rgba(0,0,0,0.5)',
+          backdropFilter: 'blur(10px)',
+          borderBottom: '1px solid rgba(255,255,255,0.1)',
+        }}
+      >
+        <Container maxWidth="xl">
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              py: 2,
+            }}
+          >
+            <Typography
+              variant="h6"
+              component={Link}
+              to="/"
+              sx={{
+                textDecoration: 'none',
+                color: 'white',
+                fontWeight: 500,
+                letterSpacing: '0.05em',
+              }}
+            >
+              BATCH 16
+            </Typography>
+            
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              {/* Navigation Links */}
+              <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 3 }}>
+                {navigationSections.map((section) => (
+                  <Button
+                    key={section.title}
+                    component={Link}
+                    to={section.path}
+                    sx={{
+                      color: 'white',
+                      textTransform: 'none',
+                      fontWeight: 400,
+                      fontSize: '0.9rem',
+                      padding: '6px 12px',
+                      borderRadius: '4px',
+                      border: 'none',
+                      '&:hover': {
+                        background: 'rgba(255,255,255,0.1)',
+                      }
+                    }}
+                  >
+                    {section.title}
+                  </Button>
+                ))}
+              </Box>
+              
+              {/* Login/Signin Buttons */}
+              <Box sx={{ display: 'flex', gap: 2, ml: 4 }}>
+                <Button
+                  variant="outlined"
+                  sx={{
+                    borderColor: 'rgba(255,255,255,0.3)',
+                    color: 'white',
+                    padding: '6px 16px',
+                    borderRadius: '4px',
+                    textTransform: 'none',
+                    '&:hover': {
+                      borderColor: 'white',
+                      background: 'rgba(255,255,255,0.05)',
+                    }
+                  }}
+                >
+                  Sign In
+                </Button>
+                <Button
+                  variant="contained"
+                  sx={{
+                    background: 'white',
+                    color: 'black',
+                    padding: '6px 16px',
+                    borderRadius: '4px',
+                    textTransform: 'none',
+                    '&:hover': {
+                      background: 'rgba(255,255,255,0.9)',
+                    }
+                  }}
+                >
+                  Sign Up
+                </Button>
+              </Box>
+            </Box>
+          </Box>
+        </Container>
+      </Box>
+    );
+  };
   
   const announcements = [
     {
       id: 1,
       title: "Football Tournament",
       date: "June 6, 2025",
-      description: "The KGHSK Batch Football Tournament is an exciting and spirited event that brings together alumni from various batches of KGHSK to compete in the beautiful game. Teams formed by batchmates showcase their football skills, camaraderie, and sportsmanship on the field. The tournament fosters a sense of unity and nostalgia, as old friends reconnect and create new memories. With thrilling matches and passionate support from the sidelines, it promises to be a celebration of both football and lifelong friendships. Get ready to cheer for your batch and witness unforgettable moments!",
+      description: "The KGHSK Batch Football Tournament is an exciting and spirited event that brings together alumni from various batches of KGHSK to compete in the beautiful game. Teams formed by batchmates showcase their football skills, camaraderie, and sportsmanship on the field.",
       icon: "🎉"
     },
     {
       id: 2,
-      title: "🚩 Jersey Design Competition Alert! 🚩",
+      title: "Jersey Design Competition",
       date: "June 5, 2025",
-      description: "As the KGHSK Batch Football Tournament approaches, it's time to gear up and make a statement on the field! We need an extraordinary jersey that truly represents the spirit of our batch.🏆 🎨 Participate in the Jersey Design Competition and showcase your creativity! The winning design will not only be featured during the tournament but also earn you an exciting prize. Don't miss this chance to make your mark! Submit your designs now and let your creativity shine! 🌟 ",
+      description: "As the KGHSK Batch Football Tournament approaches, it's time to gear up and make a statement on the field! We need an extraordinary jersey that truly represents the spirit of our batch.",
       icon: "💼"
     },
     {
       id: 3,
-      title: "📒 KGHSK Batch Directory Initiative 📒",
-      date: "Fillup the Form",
-      description: "We are creating a beautiful directory to keep track of our batchmates, know what they are up to, and stay connected. It's a great way to find out how everyone is doing, where life has taken them, and celebrate their achievements! 🌟 To make this possible, we need your help! Please fill out the form and keep us posted about your current journey. Let's strengthen our bond and keep our batch spirit alive! 💪",
+      title: "Batch Directory Initiative",
+      date: "Ongoing",
+      description: "We are creating a beautiful directory to keep track of our batchmates, know what they are up to, and stay connected. It's a great way to find out how everyone is doing.",
       icon: "🚀"
     }
   ];
@@ -546,133 +652,575 @@ const Home = () => {
     },
   ];
 
+  // Professional 3D Card Component
+  const ProfessionalCard = ({ 
+    title, 
+    description, 
+    icon, 
+    path, 
+    index 
+  }: { 
+    title: string, 
+    description: string, 
+    icon: string, 
+    path: string, 
+    index: number 
+  }) => {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ 
+          duration: 0.6, 
+          delay: 0.1 * index,
+          type: "spring",
+          stiffness: 50
+        }}
+        whileHover={{ 
+          y: -10, 
+          boxShadow: '0 20px 40px rgba(0,0,0,0.4)',
+          zIndex: 10
+        }}
+        style={{
+          perspective: '1000px',
+          height: '100%'
+        }}
+      >
+        <Link to={path} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
+          <Box
+            sx={{
+              height: '100%',
+              background: 'rgba(10,10,10,0.7)',
+              backdropFilter: 'blur(10px)',
+              borderRadius: '0.5rem',
+              overflow: 'hidden',
+              position: 'relative',
+              border: '1px solid rgba(255,255,255,0.1)',
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                borderColor: 'rgba(255,255,255,0.3)',
+                '& .icon-container': {
+                  transform: 'translateY(-5px)',
+                }
+              }
+            }}
+          >
+            {/* Gradient Border Effect */}
+            <Box 
+              sx={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: '2px',
+                background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)'
+              }}
+            />
+            
+            <Box sx={{ p: 3 }}>
+              <Box 
+                className="icon-container"
+                sx={{ 
+                  fontSize: '3rem',
+                  mb: 2,
+                  transition: 'transform 0.3s ease',
+                  filter: 'drop-shadow(0 0 10px rgba(255,255,255,0.2))'
+                }}
+              >
+                {icon}
+              </Box>
+              <Typography 
+                variant="h5" 
+                sx={{ 
+                  fontWeight: 500,
+                  mb: 1.5,
+                  color: 'white'
+                }}
+              >
+                {title}
+              </Typography>
+              <Typography 
+                variant="body2" 
+                sx={{ 
+                  color: 'rgba(255,255,255,0.7)',
+                  fontSize: '0.9rem'
+                }}
+              >
+                {description}
+              </Typography>
+            </Box>
+          </Box>
+        </Link>
+      </motion.div>
+    );
+  };
+
+  // Professional Announcement Card
+  const AnnouncementCard = ({ 
+    announcement, 
+    index, 
+    onClick 
+  }: { 
+    announcement: Announcement, 
+    index: number,
+    onClick: () => void
+  }) => {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: index * 0.1 }}
+        whileHover={{ 
+          y: -5, 
+          boxShadow: '0 15px 30px rgba(0,0,0,0.3)'
+        }}
+        onClick={onClick}
+        style={{
+          cursor: 'pointer',
+          height: '100%'
+        }}
+      >
+        <Box
+          sx={{
+            height: '100%',
+            background: 'rgba(10,10,10,0.7)',
+            backdropFilter: 'blur(10px)',
+            p: 3,
+            borderRadius: '0.5rem',
+            border: '1px solid rgba(255,255,255,0.1)',
+            transition: 'all 0.3s ease',
+            display: 'flex',
+            flexDirection: 'column',
+            position: 'relative',
+            overflow: 'hidden',
+            '&:hover': {
+              borderColor: 'rgba(255,255,255,0.3)',
+            }
+          }}
+        >
+          <Box 
+            sx={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              height: '2px',
+              background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)'
+            }}
+          />
+          
+          <Typography 
+            sx={{ 
+              fontSize: '2.5rem',
+              mb: 2
+            }}
+          >
+            {announcement.icon}
+          </Typography>
+          <Typography 
+            variant="h5" 
+            sx={{ 
+              mb: 1.5,
+              fontWeight: 500,
+              color: 'white'
+            }}
+          >
+            {announcement.title}
+          </Typography>
+          <Typography 
+            variant="body2" 
+            sx={{ 
+              color: 'rgba(255,255,255,0.7)',
+              mb: 2,
+              flex: 1,
+              fontSize: '0.9rem'
+            }}
+          >
+            {announcement.description.substring(0, 120) + '...'}
+          </Typography>
+          <Box 
+            sx={{ 
+              display: 'flex', 
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              mt: 'auto',
+              pt: 2,
+              borderTop: '1px solid rgba(255,255,255,0.1)'
+            }}
+          >
+            <Typography 
+              variant="caption" 
+              sx={{ 
+                color: 'rgba(255,255,255,0.5)'
+              }}
+            >
+              {announcement.date}
+            </Typography>
+            <Button 
+              variant="text" 
+              size="small"
+              sx={{ 
+                color: 'white',
+                fontSize: '0.8rem',
+                padding: '4px 12px',
+                borderRadius: '4px',
+                background: 'rgba(255,255,255,0.05)',
+                '&:hover': {
+                  background: 'rgba(255,255,255,0.1)'
+                }
+              }}
+            >
+              Read More
+            </Button>
+          </Box>
+        </Box>
+      </motion.div>
+    );
+  };
+
+  // Professional Section Component
+  const ProfessionalSection = ({ 
+    title, 
+    subtitle,
+    children,
+    index,
+    isActive
+  }: { 
+    title: string, 
+    subtitle?: string,
+    children: React.ReactNode,
+    index: number,
+    isActive: boolean
+  }) => {
+    return (
+      <Box 
+        sx={{ 
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          py: 10,
+          opacity: isActive ? 1 : 0.3,
+          transition: 'opacity 0.5s ease',
+        }}
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <Typography 
+            variant="h2" 
+            sx={{ 
+              textAlign: 'center',
+              mb: subtitle ? 2 : 6,
+              fontWeight: 400,
+              color: 'white',
+              letterSpacing: '0.05em',
+            }}
+          >
+            {title}
+          </Typography>
+          
+          {subtitle && (
+            <Typography 
+              variant="body1" 
+              sx={{ 
+                textAlign: 'center',
+                mb: 6,
+                color: 'rgba(255,255,255,0.7)',
+                maxWidth: '700px',
+                mx: 'auto'
+              }}
+            >
+              {subtitle}
+            </Typography>
+          )}
+        </motion.div>
+        
+        {children}
+      </Box>
+    );
+  };
+
+  // Innovative Navigation Dots
+  const NavigationDots = () => {
+    return (
+      <Box
+        sx={{
+          position: 'fixed',
+          right: { xs: '20px', md: '40px' },
+          top: '50%',
+          transform: 'translateY(-50%)',
+          zIndex: 100,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '15px'
+        }}
+      >
+        {[0, 1, 2].map((index) => (
+          <Box
+            key={index}
+            onClick={() => {
+              setActiveSection(index);
+              const sectionElement = document.getElementById(`section-${index}`);
+              if (sectionElement) {
+                sectionElement.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
+            sx={{
+              width: '12px',
+              height: '12px',
+              borderRadius: '50%',
+              background: activeSection === index ? 'white' : 'rgba(255,255,255,0.3)',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                transform: 'scale(1.2)',
+                background: 'rgba(255,255,255,0.8)'
+              }
+            }}
+          />
+        ))}
+      </Box>
+    );
+  };
+
+  // Detect active section on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + window.innerHeight / 2;
+      
+      for (let i = 2; i >= 0; i--) {
+        const section = document.getElementById(`section-${i}`);
+        if (section && scrollPosition >= section.offsetTop) {
+          setActiveSection(i);
+          break;
+        }
+      }
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <>
       <Box sx={{ 
-        minHeight: '100vh',
         position: 'relative',
         overflow: 'hidden',
       }}>
         <VideoBackground />
         <ParticleField />
+        <TopNavBar />
         
-        {/* Immersive Header */}
-        <motion.div
-          style={{ 
-            opacity: titleOpacity,
-            y: titleY,
-            position: 'relative',
+        {/* Clean Hero Section - Just Batch 16 */}
+        <Box 
+          id="section-0"
+          sx={{ 
             height: '100vh',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            flexDirection: 'column',
-            padding: '0 2rem',
+            position: 'relative',
+            flexDirection: 'column'
           }}
         >
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
+            initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.5, type: 'spring' }}
+            transition={{ duration: 1.2, type: 'spring' }}
+            style={{
+              textAlign: 'center'
+            }}
           >
             <Typography 
               variant="h1" 
               sx={{ 
-                fontSize: 'clamp(3rem, 15vw, 12rem)',
-                textAlign: 'center',
+                fontSize: 'clamp(4rem, 15vw, 12rem)',
                 background: 'linear-gradient(45deg, #ffffff, #aaaaaa)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
+                fontWeight: 500,
+                letterSpacing: '-0.03em',
                 textShadow: '0 10px 30px rgba(0,0,0,0.5)',
-                fontWeight: 600,
-                letterSpacing: '-0.05em',
-                mb: 2
               }}
             >
-              Batch Sixteenz
+              Batch 16
             </Typography>
           </motion.div>
           
+          {/* Scroll Indicator */}
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.5 }}
-          >
-            <Typography 
-              variant="h2" 
-              sx={{ 
-                textAlign: 'center',
-                color: 'rgba(255,255,255,0.7)',
-                maxWidth: '800px',
-                mx: 'auto',
-                fontWeight: 300,
-                letterSpacing: '0.05em',
-              }}
-            >
-              A JOURNEY THROUGH TIME
-            </Typography>
-          </motion.div>
-          
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1.5 }}
+            transition={{ duration: 1, delay: 1 }}
             style={{
               position: 'absolute',
               bottom: '10%',
               left: '50%',
               transform: 'translateX(-50%)',
+              textAlign: 'center'
             }}
           >
             <Typography 
               variant="body1" 
               sx={{ 
-                color: 'rgba(255,255,255,0.6)',
-                textAlign: 'center',
-                animation: 'bounce 2s infinite',
-                '@keyframes bounce': {
-                  '0%, 20%, 50%, 80%, 100%': { transform: 'translateY(0)' },
-                  '40%': { transform: 'translateY(-20px)' },
-                  '60%': { transform: 'translateY(-10px)' }
-                }
+                color: 'rgba(255,255,255,0.7)',
+                mb: 2,
+                fontWeight: 300,
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                fontSize: '0.9rem'
               }}
             >
-              Scroll to explore our timeline
-              <br />
-              ↓
+              Scroll to know more about us
             </Typography>
+            <Box 
+              sx={{ 
+                width: '30px',
+                height: '50px',
+                border: '2px solid rgba(255,255,255,0.3)',
+                borderRadius: '15px',
+                position: 'relative',
+                mx: 'auto',
+                '&::before': {
+                  content: '""',
+                  position: 'absolute',
+                  top: '8px',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  width: '6px',
+                  height: '6px',
+                  borderRadius: '50%',
+                  background: 'white',
+                  animation: 'scrollDown 2s infinite',
+                }
+              }}
+            />
+            <Box
+              sx={{
+                '@keyframes scrollDown': {
+                  '0%': { 
+                    opacity: 1,
+                    transform: 'translateX(-50%) translateY(0)'
+                  },
+                  '100%': { 
+                    opacity: 0,
+                    transform: 'translateX(-50%) translateY(20px)'
+                  }
+                }
+              }}
+            />
           </motion.div>
-        </motion.div>
+        </Box>
         
-        {/* Timeline Journey */}
-        <Container maxWidth="lg" sx={{ pt: 20, pb: 20 }}>
-          <Box sx={{ position: 'relative' }}>
-            {/* Announcements */}
-            {announcements.map((announcement, index) => (
-              <TimelineNode
-                key={`announcement-${announcement.id}`}
-                title={announcement.title}
-                description={announcement.description.substring(0, 120) + '...'}
-                icon={announcement.icon}
-                index={index}
-                isAnnouncement={true}
-                onClick={() => setSelectedAnnouncement(announcement)}
-              />
-            ))}
+        {/* MOVED: Announcements Section to second slide */}
+        <Box 
+          id="section-1"
+          sx={{ 
+            minHeight: '100vh',
+            py: 15,
+            pt: 20
+          }}
+        >
+          <Container maxWidth="lg">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <Typography 
+                variant="h2" 
+                sx={{ 
+                  textAlign: 'center',
+                  mb: 8,
+                  fontWeight: 400,
+                  color: 'white',
+                  position: 'relative',
+                  '&::after': {
+                    content: '""',
+                    position: 'absolute',
+                    bottom: '-20px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: '60px',
+                    height: '2px',
+                    background: 'linear-gradient(90deg, transparent, white, transparent)'
+                  }
+                }}
+              >
+                Latest Announcements
+              </Typography>
+            </motion.div>
             
-            {/* Navigation Sections */}
-            {navigationSections.map((section, index) => (
-              <TimelineNode
-                key={`section-${section.title}`}
-                title={section.title}
-                description={section.description}
-                icon={section.icon}
-                path={section.path}
-                index={index + announcements.length}
-              />
-            ))}
-          </Box>
-        </Container>
+            <Grid container spacing={4}>
+              {announcements.map((announcement, index) => (
+                <Grid item xs={12} md={4} key={announcement.id}>
+                  <AnnouncementCard
+                    announcement={announcement}
+                    index={index}
+                    onClick={() => setSelectedAnnouncement(announcement)}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+          </Container>
+        </Box>
+        
+        {/* MOVED: Navigation Sections to third slide */}
+        <Box 
+          id="section-2"
+          sx={{ 
+            minHeight: '100vh',
+            py: 15
+          }}
+        >
+          <Container maxWidth="lg">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <Typography 
+                variant="h2" 
+                sx={{ 
+                  textAlign: 'center',
+                  mb: 8,
+                  fontWeight: 400,
+                  color: 'white',
+                  position: 'relative',
+                  '&::after': {
+                    content: '""',
+                    position: 'absolute',
+                    bottom: '-20px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: '60px',
+                    height: '2px',
+                    background: 'linear-gradient(90deg, transparent, white, transparent)'
+                  }
+                }}
+              >
+                Explore Our Network
+              </Typography>
+            </motion.div>
+            
+            <Grid container spacing={3}>
+              {navigationSections.map((section, index) => (
+                <Grid item xs={12} sm={6} md={4} key={section.title}>
+                  <ProfessionalCard
+                    title={section.title}
+                    description={section.description}
+                    icon={section.icon}
+                    path={section.path}
+                    index={index}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+          </Container>
+        </Box>
         
         {/* 3D Modal */}
         <AnnouncementModal
@@ -693,8 +1241,6 @@ const Home = () => {
 
 
 const App = () => {
-  const [darkMode, setDarkMode] = useState(false);
-  
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -714,6 +1260,5 @@ const App = () => {
 };
 
 export default App;
-// Then use it like this:
 
 

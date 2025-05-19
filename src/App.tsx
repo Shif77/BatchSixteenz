@@ -608,8 +608,8 @@ const Home = () => {
       id: 3,
       title: "Batch Directory Initiative",
       date: "Ongoing",
-      description: "We are creating a beautiful directory to keep track of our batchmates, know what they are up to, and stay connected. It's a great way to find out how everyone is doing.",
-      icon: "🚀"
+      description: "We are creating a beautiful directory to keep track of our batchmates, know what they are up to, and stay connected. It's a great way to find out how everyone is doing. Please Fill this form - https://shorturl.at/iltqj ",
+      icon:  "🚀"
     }
   ];
   
@@ -1168,7 +1168,7 @@ const Home = () => {
           </Container>
         </Box>
         
-        {/* MOVED: Navigation Sections to third slide */}
+        {/* NEW: Interactive Class Yearbook Section (third slide) */}
         <Box 
           id="section-2"
           sx={{ 
@@ -1186,9 +1186,22 @@ const Home = () => {
                 variant="h2" 
                 sx={{ 
                   textAlign: 'center',
-                  mb: 8,
+                  mb: 2,
                   fontWeight: 400,
                   color: 'white',
+                  position: 'relative',
+                }}
+              >
+                Class of Legends
+              </Typography>
+              <Typography 
+                variant="body1" 
+                sx={{ 
+                  textAlign: 'center',
+                  mb: 8,
+                  maxWidth: '700px',
+                  mx: 'auto',
+                  color: 'rgba(255,255,255,0.7)',
                   position: 'relative',
                   '&::after': {
                     content: '""',
@@ -1202,23 +1215,383 @@ const Home = () => {
                   }
                 }}
               >
-                Explore Our Network
+                Every batch has its characters. Meet the personalities that made our journey unforgettable.
               </Typography>
             </motion.div>
             
-            <Grid container spacing={3}>
-              {navigationSections.map((section, index) => (
-                <Grid item xs={12} sm={6} md={4} key={section.title}>
-                  <ProfessionalCard
-                    title={section.title}
-                    description={section.description}
-                    icon={section.icon}
-                    path={section.path}
-                    index={index}
-                  />
-                </Grid>
-              ))}
+            {/* Interactive Yearbook Grid */}
+            <Grid container spacing={4}>
+              {/* The Class Clown */}
+              <Grid item xs={12} md={4}>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                  whileHover={{ 
+                    scale: 1.05,
+                    rotateY: 5,
+                    boxShadow: '0 20px 40px rgba(0,0,0,0.4)'
+                  }}
+                >
+                  <Box
+                    sx={{
+                      background: 'linear-gradient(135deg, rgba(20,20,20,0.8) 0%, rgba(10,10,10,0.9) 100%)',
+                      borderRadius: '1rem',
+                      overflow: 'hidden',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      height: '100%',
+                      position: 'relative',
+                      '&::before': {
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: '3px',
+                        background: 'linear-gradient(90deg, #FF5F6D, #FFC371)'
+                      }
+                    }}
+                  >
+                    <Box sx={{ p: 4, textAlign: 'center' }}>
+                      <Typography sx={{ fontSize: '4rem', mb: 2 }}>
+                        😂
+                      </Typography>
+                      <Typography variant="h4" sx={{ mb: 2, fontWeight: 500 }}>
+                        The Class Clown
+                      </Typography>
+                      <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.7)', mb: 3 }}>
+                        Always ready with a joke, never serious for more than five minutes. The one who made even the strictest teachers crack a smile.
+                      </Typography>
+                      <Box sx={{ 
+                        p: 2, 
+                        background: 'rgba(255,255,255,0.05)', 
+                        borderRadius: '0.5rem',
+                        fontStyle: 'italic',
+                        color: 'rgba(255,255,255,0.6)'
+                      }}>
+                        "Why study history when you can make it? And by making it, I mean making everyone laugh until they cry."
+                      </Box>
+                    </Box>
+                  </Box>
+                </motion.div>
+              </Grid>
+              
+              {/* The Overachiever */}
+              <Grid item xs={12} md={4}>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  whileHover={{ 
+                    scale: 1.05,
+                    rotateY: 5,
+                    boxShadow: '0 20px 40px rgba(0,0,0,0.4)'
+                  }}
+                >
+                  <Box
+                    sx={{
+                      background: 'linear-gradient(135deg, rgba(20,20,20,0.8) 0%, rgba(10,10,10,0.9) 100%)',
+                      borderRadius: '1rem',
+                      overflow: 'hidden',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      height: '100%',
+                      position: 'relative',
+                      '&::before': {
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: '3px',
+                        background: 'linear-gradient(90deg, #4E65FF, #92EFFD)'
+                      }
+                    }}
+                  >
+                    <Box sx={{ p: 4, textAlign: 'center' }}>
+                      <Typography sx={{ fontSize: '4rem', mb: 2 }}>
+                        🏆
+                      </Typography>
+                      <Typography variant="h4" sx={{ mb: 2, fontWeight: 500 }}>
+                        The Overachiever
+                      </Typography>
+                      <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.7)', mb: 3 }}>
+                        First to raise their hand, last to leave the library. Somehow managed to be class topper, sports captain, and debate champion all at once.
+                      </Typography>
+                      <Box sx={{ 
+                        p: 2, 
+                        background: 'rgba(255,255,255,0.05)', 
+                        borderRadius: '0.5rem',
+                        fontStyle: 'italic',
+                        color: 'rgba(255,255,255,0.6)'
+                      }}>
+                        "Sleep is for the weak. I'll sleep when I've conquered the world... or at least after finals."
+                      </Box>
+                    </Box>
+                  </Box>
+                </motion.div>
+              </Grid>
+              
+              {/* The Rebel */}
+              <Grid item xs={12} md={4}>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                  whileHover={{ 
+                    scale: 1.05,
+                    rotateY: 5,
+                    boxShadow: '0 20px 40px rgba(0,0,0,0.4)'
+                  }}
+                >
+                  <Box
+                    sx={{
+                      background: 'linear-gradient(135deg, rgba(20,20,20,0.8) 0%, rgba(10,10,10,0.9) 100%)',
+                      borderRadius: '1rem',
+                      overflow: 'hidden',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      height: '100%',
+                      position: 'relative',
+                      '&::before': {
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: '3px',
+                        background: 'linear-gradient(90deg, #FF4B2B, #FF416C)'
+                      }
+                    }}
+                  >
+                    <Box sx={{ p: 4, textAlign: 'center' }}>
+                      <Typography sx={{ fontSize: '4rem', mb: 2 }}>
+                        🤘
+                      </Typography>
+                      <Typography variant="h4" sx={{ mb: 2, fontWeight: 500 }}>
+                        The Rebel
+                      </Typography>
+                      <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.7)', mb: 3 }}>
+                        Uniform? Optional. Rules? Suggestions. Always pushing boundaries and questioning authority, yet somehow never getting expelled.
+                      </Typography>
+                      <Box sx={{ 
+                        p: 2, 
+                        background: 'rgba(255,255,255,0.05)', 
+                        borderRadius: '0.5rem',
+                        fontStyle: 'italic',
+                        color: 'rgba(255,255,255,0.6)'
+                      }}>
+                        "They said I couldn't wear sneakers with my uniform. So I wore boots instead."
+                      </Box>
+                    </Box>
+                  </Box>
+                </motion.div>
+              </Grid>
+              
+              {/* The Quiet Genius */}
+              <Grid item xs={12} md={4}>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: 0.4 }}
+                  whileHover={{ 
+                    scale: 1.05,
+                    rotateY: 5,
+                    boxShadow: '0 20px 40px rgba(0,0,0,0.4)'
+                  }}
+                >
+                  <Box
+                    sx={{
+                      background: 'linear-gradient(135deg, rgba(20,20,20,0.8) 0%, rgba(10,10,10,0.9) 100%)',
+                      borderRadius: '1rem',
+                      overflow: 'hidden',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      height: '100%',
+                      position: 'relative',
+                      '&::before': {
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: '3px',
+                        background: 'linear-gradient(90deg, #43C6AC, #191654)'
+                      }
+                    }}
+                  >
+                    <Box sx={{ p: 4, textAlign: 'center' }}>
+                      <Typography sx={{ fontSize: '4rem', mb: 2 }}>
+                        🧠
+                      </Typography>
+                      <Typography variant="h4" sx={{ mb: 2, fontWeight: 500 }}>
+                        The Quiet Genius
+                      </Typography>
+                      <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.7)', mb: 3 }}>
+                        Rarely spoke in class but when they did, everyone listened. Could solve complex problems in their head while doodling in their notebook.
+                      </Typography>
+                      <Box sx={{ 
+                        p: 2, 
+                        background: 'rgba(255,255,255,0.05)', 
+                        borderRadius: '0.5rem',
+                        fontStyle: 'italic',
+                        color: 'rgba(255,255,255,0.6)'
+                      }}>
+                        "No, I didn't study for the test. I just remembered everything from when I read the textbook for fun last summer."
+                      </Box>
+                    </Box>
+                  </Box>
+                </motion.div>
+              </Grid>
+              
+              {/* The Social Butterfly */}
+              <Grid item xs={12} md={4}>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: 0.5 }}
+                  whileHover={{ 
+                    scale: 1.05,
+                    rotateY: 5,
+                    boxShadow: '0 20px 40px rgba(0,0,0,0.4)'
+                  }}
+                >
+                  <Box
+                    sx={{
+                      background: 'linear-gradient(135deg, rgba(20,20,20,0.8) 0%, rgba(10,10,10,0.9) 100%)',
+                      borderRadius: '1rem',
+                      overflow: 'hidden',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      height: '100%',
+                      position: 'relative',
+                      '&::before': {
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: '3px',
+                        background: 'linear-gradient(90deg, #FFAFBD, #ffc3a0)'
+                      }
+                    }}
+                  >
+                    <Box sx={{ p: 4, textAlign: 'center' }}>
+                      <Typography sx={{ fontSize: '4rem', mb: 2 }}>
+                        🦋
+                      </Typography>
+                      <Typography variant="h4" sx={{ mb: 2, fontWeight: 500 }}>
+                        The Social Butterfly
+                      </Typography>
+                      <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.7)', mb: 3 }}>
+                        Knew everyone's name, birthday, and favorite color. Had connections in every class and could get you into any party. The unofficial PR of Batch 16.
+                      </Typography>
+                      <Box sx={{ 
+                        p: 2, 
+                        background: 'rgba(255,255,255,0.05)', 
+                        borderRadius: '0.5rem',
+                        fontStyle: 'italic',
+                        color: 'rgba(255,255,255,0.6)'
+                      }}>
+                        "Of course I know the principal's secretary's cousin. How do you think we got permission for the farewell party?"
+                      </Box>
+                    </Box>
+                  </Box>
+                </motion.div>
+              </Grid>
+              
+              {/* The Procrastinator */}
+              <Grid item xs={12} md={4}>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: 0.6 }}
+                  whileHover={{ 
+                    scale: 1.05,
+                    rotateY: 5,
+                    boxShadow: '0 20px 40px rgba(0,0,0,0.4)'
+                  }}
+                >
+                  <Box
+                    sx={{
+                      background: 'linear-gradient(135deg, rgba(20,20,20,0.8) 0%, rgba(10,10,10,0.9) 100%)',
+                      borderRadius: '1rem',
+                      overflow: 'hidden',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      height: '100%',
+                      position: 'relative',
+                      '&::before': {
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: '3px',
+                        background: 'linear-gradient(90deg, #654ea3, #eaafc8)'
+                      }
+                    }}
+                  >
+                    <Box sx={{ p: 4, textAlign: 'center' }}>
+                      <Typography sx={{ fontSize: '4rem', mb: 2 }}>
+                        ⏰
+                      </Typography>
+                      <Typography variant="h4" sx={{ mb: 2, fontWeight: 500 }}>
+                        The Procrastinator
+                      </Typography>
+                      <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.7)', mb: 3 }}>
+                        Started assignments the night before, somehow still passed. Mastered the art of writing a 10-page paper in 3 hours while surviving on energy drinks.
+                      </Typography>
+                      <Box sx={{ 
+                        p: 2, 
+                        background: 'rgba(255,255,255,0.05)', 
+                        borderRadius: '0.5rem',
+                        fontStyle: 'italic',
+                        color: 'rgba(255,255,255,0.6)'
+                      }}>
+                        "Due tomorrow? Do tomorrow. But seriously, can I borrow your notes? I was 'sick' last week."
+                      </Box>
+                    </Box>
+                  </Box>
+                </motion.div>
+              </Grid>
             </Grid>
+            
+            {/* Interactive Element */}
+            <Box sx={{ mt: 10, textAlign: 'center' }}>
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.7 }}
+              >
+                <Typography variant="h3" sx={{ mb: 3, fontWeight: 500 }}>
+                  Which Character Were You?
+                </Typography>
+                <Typography variant="body1" sx={{ mb: 4, maxWidth: '700px', mx: 'auto', color: 'rgba(255,255,255,0.8)' }}>
+                  Every batch has its unique personalities. Tag yourself and your friends in the comments section of our forum!
+                </Typography>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Button 
+                    variant="outlined"
+                    component={Link}
+                    to="/forum"
+                    sx={{
+                      borderRadius: '0.5rem',
+                      padding: '0.8rem 2rem',
+                      background: 'rgba(255,255,255,0.1)',
+                      backdropFilter: 'blur(5px)',
+                      border: '1px solid rgba(255,255,255,0.2)',
+                      color: 'white',
+                      fontWeight: 400,
+                      '&:hover': {
+                        background: 'rgba(255,255,255,0.2)',
+                        border: '1px solid rgba(255,255,255,0.3)',
+                      }
+                    }}
+                  >
+                    Join the Conversation
+                  </Button>
+                </motion.div>
+              </motion.div>
+            </Box>
           </Container>
         </Box>
         

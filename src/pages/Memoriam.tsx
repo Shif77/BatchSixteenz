@@ -22,7 +22,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import LocalFloristIcon from '@mui/icons-material/LocalFlorist';
 import CandlestickChartIcon from '@mui/icons-material/CandlestickChart';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import Navbar from '../components/Navbar';
+// Removed Navbar import
 
 interface Memorial {
   id: number;
@@ -137,12 +137,12 @@ const Memoriam: React.FC = () => {
 
   return (
     <>
-      <Navbar darkMode={true} setDarkMode={() => {}} />
+      {/* Removed Navbar component */}
       <Box
         sx={{
           minHeight: '100vh',
           background: 'linear-gradient(to bottom, #000000, #1c1c1c)',
-          pt: 12,
+          pt: 4, // Reduced padding-top since we removed the navbar
           pb: 8
         }}
       >

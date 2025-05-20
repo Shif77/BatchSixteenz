@@ -144,6 +144,155 @@ const ParticleField = () => {
   );
 };
 
+// Legacy Wall for Teachers Component
+  const TeacherLegacyWall = () => {
+    const teachers = [
+      { 
+        name: 'Mrs. Sharma', 
+        subject: 'Mathematics', 
+        photo: '/images/teacher1.jpg',
+        impact: 'Inspired a generation of mathematicians with her innovative teaching methods.',
+        years: '1990-2010'
+      },
+      { 
+        name: 'Mr. Verma', 
+        subject: 'Physics', 
+        photo: '/images/teacher2.jpg',
+        impact: 'His experiments and demonstrations made physics come alive for students.',
+        years: '1995-2015'
+      },
+      { 
+        name: 'Ms. Gupta', 
+        subject: 'Literature', 
+        photo: '/images/teacher3.jpg',
+        impact: 'Fostered a love for reading and creative writing in countless students.',
+        years: '1985-2012'
+      },
+      { 
+        name: 'Mr. Patel', 
+        subject: 'History', 
+        photo: '/images/teacher4.jpg',
+        impact: 'Made history lessons engaging through storytelling and interactive discussions.',
+        years: '1992-2018'
+      }
+    ];
+    
+    return (
+      <Box sx={{ 
+        mt: 10, 
+        mb: 10,
+        maxWidth: '1200px',
+        mx: 'auto'
+      }}>
+        <Typography variant="h2" sx={{ 
+          mb: 2, 
+          textAlign: 'center',
+          background: 'linear-gradient(90deg, #fff, #aaa)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          fontWeight: 600
+        }}>
+          Teacher Legacy Wall
+        </Typography>
+        
+        <Typography variant="h6" sx={{ 
+          mb: 6, 
+          textAlign: 'center',
+          color: 'rgba(255,255,255,0.7)',
+          maxWidth: '800px',
+          mx: 'auto'
+        }}>
+          Honoring the educators who shaped our minds and hearts during our formative years.
+        </Typography>
+        
+        <Grid container spacing={4}>
+          {teachers.map((teacher, index) => (
+            <Grid item xs={12} md={6} key={index}>
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ 
+                  duration: 0.6, 
+                  delay: 0.1 * index,
+                  type: "spring",
+                  stiffness: 50
+                }}
+              >
+                <Card sx={{ 
+                  display: 'flex',
+                  flexDirection: { xs: 'column', sm: 'row' },
+                  background: 'rgba(20,20,20,0.7)',
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  overflow: 'hidden',
+                  height: '100%'
+                }}>
+                  <Box sx={{ 
+                    width: { xs: '100%', sm: '40%' },
+                    position: 'relative',
+                    minHeight: { xs: '200px', sm: 'auto' }
+                  }}>
+                    <Box 
+                      component="img"
+                      src={teacher.photo}
+                      alt={teacher.name}
+                      sx={{ 
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        position: { xs: 'relative', sm: 'absolute' },
+                        top: 0,
+                        left: 0,
+                        filter: 'grayscale(30%)'
+                      }}
+                    />
+                  </Box>
+                  
+                  <CardContent sx={{ 
+                    flexGrow: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    p: 3
+                  }}>
+                    <Typography variant="overline" sx={{ color: 'rgba(255,255,255,0.7)' }}>
+                      {teacher.subject} • {teacher.years}
+                    </Typography>
+                    
+                    <Typography variant="h5" sx={{ mb: 2, fontWeight: 500 }}>
+                      {teacher.name}
+                    </Typography>
+                    
+                    <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)', mb: 2 }}>
+                      {teacher.impact}
+                    </Typography>
+                    
+                    <Button 
+                      variant="outlined" 
+                      size="small"
+                      sx={{ 
+                        alignSelf: 'flex-start',
+                        mt: 'auto',
+                        borderColor: 'rgba(255,255,255,0.3)',
+                        color: 'white',
+                        '&:hover': {
+                          borderColor: 'white',
+                          background: 'rgba(255,255,255,0.05)'
+                        }
+                      }}
+                    >
+                      Share a Memory
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+    );
+  };
+
 // Immersive video background with parallax effect
 const VideoBackground = () => {
   const { scrollYProgress } = useScroll();
@@ -1618,15 +1767,17 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/directory" element={<Directory />} />
-          <Route path="/events" element={<Events />} />
-          <Route path="/forum" element={<Forum />} />
-          <Route path="/gallery" element={<Gallery />} />
-          <Route path="/achievements" element={<Achievements />} />
-          <Route path="/memoriam" element={<Memoriam />} />
-        </Routes>
+        <AnimatePresence mode="wait">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/directory" element={<Directory />} />
+            <Route path="/events" element={<Events />} />
+            <Route path="/forum" element={<Forum />} />
+            <Route path="/gallery" element={<Gallery />} />
+            <Route path="/achievements" element={<Achievements />} />
+            <Route path="/memoriam" element={<Memoriam />} />
+          </Routes>
+        </AnimatePresence>
       </Router>
     </ThemeProvider>
   );

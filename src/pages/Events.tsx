@@ -68,7 +68,7 @@ const Events: React.FC = () => {
       location: "School Field",
       description: "The KGHSK Batch Football Tournament is an exciting and spirited event that brings together alumni from various batches of KGHSK to compete in the beautiful game. Teams formed by batchmates showcase their football skills, camaraderie, and sportsmanship on the field.",
       category: "Sports",
-      imageUrl: "/images/Shoeb.jpeg",
+      imageUrl: "/images/shoeb.jpeg",
       isUpcoming: true
     },
     {

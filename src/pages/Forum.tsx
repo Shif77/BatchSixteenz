@@ -68,11 +68,11 @@ const Forum: React.FC = () => {
   const [posts, setPosts] = useState<ForumPost[]>([
     {
       id: "1",
-      title: "Remember our first school trip?",
-      author: "John Doe",
-      authorAvatar: "https://i.pravatar.cc/150?img=1",
+      title: "Remember last tournament?",
+      author: "Shoeb Reza",
+      authorAvatar: "/images/shoeb2.jpg",
       date: "2024-01-15",
-      content: "Let's share memories from our first school trip to the museum. I remember how excited everyone was on the bus ride there. What are your favorite memories from that day?",
+      content: "Tomader ki mone ache ami kibhabe last time football tournament e goal miss korchi?",
       replies: 5,
       likes: 12,
       category: "Memories",
@@ -81,11 +81,11 @@ const Forum: React.FC = () => {
     },
     {
       id: "2",
-      title: "Upcoming Batch 16 Reunion Planning",
-      author: "Jane Smith",
-      authorAvatar: "https://i.pravatar.cc/150?img=5",
+      title: "Match",
+      author: "Sadman Jawad Sakib",
+      authorAvatar: "/images/sakib.jpg",
       date: "2024-02-20",
-      content: "We're planning our 10-year reunion for next summer. Let's discuss venue options, activities, and how to reach out to everyone. I was thinking we could book the old school auditorium if it's available.",
+      content: "Ekta ki Barca v Real match er ayojon kora jayna?",
       replies: 8,
       likes: 24,
       category: "Events",
@@ -94,36 +94,102 @@ const Forum: React.FC = () => {
     },
     {
       id: "3",
-      title: "Career Networking for Batch 16",
-      author: "Robert Johnson",
-      authorAvatar: "https://i.pravatar.cc/150?img=8",
+      title: "Question",
+      author: "Ahmed Toukir",
+      authorAvatar: "/images/babu.jpg",
       date: "2024-03-05",
-      content: "Many of us are in different industries now. Let's use this thread to network professionally. Share what you're doing now and if you can offer any opportunities or mentorship to fellow batchmates.",
+      content: "Ekta Meye Dau nahole Collection dau!?",
       replies: 15,
       likes: 32,
-      category: "Networking",
+      category: "Questions",
       isLiked: false,
       isSaved: false
     }
   ]);
   
   // Sample replies for the first post
-  const [replies, setReplies] = useState<Reply[]>([
+  const [replies, setReplies] = useState<Reply[]>([    
     {
       id: "r1",
-      author: "Sarah Williams",
-      authorAvatar: "https://i.pravatar.cc/150?img=10",
+      author: "Shifat Hasan",
+      authorAvatar: "/images/shifat.jpg",
       date: "2024-01-16",
-      content: "I remember how we all got lost in the dinosaur exhibit and our teacher was frantically searching for us!",
+      content: "IDOLO",
       likes: 8
     },
     {
       id: "r2",
-      author: "Michael Brown",
-      authorAvatar: "https://i.pravatar.cc/150?img=12",
+      author: "Julfekar Hasan Ontor",
+      authorAvatar: "/images/ontor.jpg",
       date: "2024-01-17",
-      content: "The bus ride back was even more fun. Remember how we all sang school songs the entire way?",
+      content: "Tor thaki mui hajar gun e bhalo khelang",
       likes: 5
+    },
+    // Replies for the second post (id: "2")
+    {
+      id: "r3",
+      author: "Asadujjaman Akash",
+      authorAvatar: "/images/akash.jpg",
+      date: "2024-02-21",
+      content: "Aj injured bole khelte parina!",
+      likes: 7
+    },
+    {
+      id: "r4",
+      author: "Shoeb Reja",
+      authorAvatar: "/images/shoeb2.jpg",
+      date: "2024-02-22",
+      content: "Ami goalkeeper hote chai!",
+      likes: 4
+    },
+    {
+      id: "r5",
+      author: "Hasin Arman Shifa",
+      authorAvatar: "/images/shifa.jpg",
+      date: "2024-02-23",
+      content: "Barcar to player e nai! Khelbe ke?",
+      likes: 10
+    },
+    // Replies for the third post (id: "3")
+    {
+      id: "r6",
+      author: "Md. Jion Khan",
+      authorAvatar: "/images/jion.jpg",
+      date: "2024-03-06",
+      content: "Babu amakeo ekta dao",
+      likes: 15
+    },
+    {
+      id: "r7",
+      author: "Hasin Arman Shifa",
+      authorAvatar: "/images/shifa.jpg",
+      date: "2024-03-07",
+      content: "Amar Sosshokhetro",
+      likes: 12
+    },
+    {
+      id: "r8",
+      author: "Fahim Hossain Sykot",
+      authorAvatar: "/images/bhau.jpg",
+      date: "2024-03-08",
+      content: "Babu e moru te monehoyna ar kono din pani ashbe",
+      likes: 8
+    },
+    {
+      id: "r9",
+      author: "Shifat Hasan",
+      authorAvatar: "/images/shifat.jpg",
+      date: "2024-03-09",
+      content: "Ami ekta meye dite pari, kintu collection dite parbo na!",
+      likes: 20
+    },
+    {
+      id: "r10",
+      author: "Rakibul Hasan Rony",
+      authorAvatar: "/images/rony.jpg",
+      date: "2024-03-10",
+      content: "Mor Barit ay",
+      likes: 18
     }
   ]);
 
@@ -617,7 +683,19 @@ const Forum: React.FC = () => {
                 Replies
               </Typography>
               
-              {replies.map((reply) => (
+              {replies
+                .filter(reply => {
+                  if (selectedPost.id === "1") {
+                    return reply.id === "r1" || reply.id === "r2";
+                  } else if (selectedPost.id === "2") {
+                    return reply.id === "r3" || reply.id === "r4" || reply.id === "r5";
+                  } else if (selectedPost.id === "3") {
+                    return reply.id === "r6" || reply.id === "r7" || reply.id === "r8" || 
+                           reply.id === "r9" || reply.id === "r10";
+                  }
+                  return false;
+                })
+                .map((reply) => (
                 <Box key={reply.id} sx={{ mb: 3, pl: { xs: 0, md: 2 } }}>
                   <Box sx={{ display: 'flex', mb: 2 }}>
                     <Avatar 

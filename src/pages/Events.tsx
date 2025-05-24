@@ -53,22 +53,22 @@ const Events: React.FC = () => {
   const events: Event[] = [
     {
       id: 1,
-      title: "Annual Reunion 2024",
-      date: "December 25, 2024",
-      location: "School Auditorium",
+      title: "Annual Reunion 2025",
+      date: "June 6, 2025",
+      location: "School Field",
       description: "Join us for our annual reunion celebration with dinner and cultural program. This year's theme is 'Nostalgia Nights' where we'll recreate some of our favorite school memories. There will be performances by our talented batchmates, a special tribute to our teachers, and of course, plenty of time to catch up with old friends.",
       category: "Reunion",
-      imageUrl: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+      imageUrl: "/images/reunion.jpg",
       isUpcoming: true
     },
     {
       id: 2,
       title: "Football Tournament",
       date: "June 6, 2025",
-      location: "City Sports Complex",
+      location: "School Field",
       description: "The KGHSK Batch Football Tournament is an exciting and spirited event that brings together alumni from various batches of KGHSK to compete in the beautiful game. Teams formed by batchmates showcase their football skills, camaraderie, and sportsmanship on the field.",
       category: "Sports",
-      imageUrl: "https://images.unsplash.com/photo-1517466787929-bc90951d0974?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+      imageUrl: "/images/Shoeb.jpeg",
       isUpcoming: true
     },
     {
@@ -78,14 +78,14 @@ const Events: React.FC = () => {
       location: "Online",
       description: "As the KGHSK Batch Football Tournament approaches, it's time to gear up and make a statement on the field! We need an extraordinary jersey that truly represents the spirit of our batch. Submit your creative designs and the winning design will be produced for our team.",
       category: "Competition",
-      imageUrl: "https://images.unsplash.com/photo-1580880783109-6746c2a12541?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+      imageUrl: "/images/jersey.png",
       isUpcoming: true
     },
     {
       id: 4,
       title: "Career Networking Night",
-      date: "August 15, 2024",
-      location: "Grand Hotel Conference Center",
+      date: "June 9, 2025",
+      location: "Dharla Bridge",
       description: "Connect with fellow batch mates in various industries for professional networking, mentorship opportunities, and career growth. Special guest speakers from our own batch who have achieved remarkable success in their fields will share their insights and experiences.",
       category: "Networking",
       imageUrl: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
@@ -94,22 +94,22 @@ const Events: React.FC = () => {
     {
       id: 5,
       title: "Batch 16 Charity Drive",
-      date: "October 10, 2024",
+      date: "june 10, 2024",
       location: "Community Center",
-      description: "Let's give back to our community! Join us for a day of service as we organize a charity drive to support underprivileged students at our alma mater. We'll be collecting school supplies, books, and funds to establish a scholarship program.",
+      description: "Let's give back to our community! Join us for a day of service as we organize a charity drive to support underprivileged students at our society. We'll be collecting school supplies, books, and funds to establish a scholarship program.",
       category: "Charity",
       imageUrl: "https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
       isUpcoming: true
     },
     {
       id: 6,
-      title: "Summer Picnic 2023",
-      date: "July 20, 2023",
-      location: "Riverside Park",
-      description: "Our annual summer picnic was a huge success with games, barbecue, and catching up with old friends. We had over 50 batch mates attend with their families for a day of fun in the sun.",
+      title: "Summer tour 2025",
+      date: "May 10, 2025",
+      location: "SONAICHORI TRAIL",
+      description: "Our last summer tour was a huge success with games, barbecue, and catching up with old friends. We had over 50 batch mates attend with their families for a day of fun in the sun.",
       category: "Social",
-      imageUrl: "https://images.unsplash.com/photo-1526976668912-1a811878dd37?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
-      isUpcoming: false
+      imageUrl: "/images/tour.jpeg",
+      isUpcoming: true
     }
   ];
 

@@ -55,9 +55,9 @@ const Gallery: React.FC = () => {
       id: "2",
       url: "/images/reunion.jpg",
       title: "Annual Reunion",
-      year: 2023,
+      year: 2025,
       category: "Reunions",
-      description: "Batch 16 reunion after 7 years - it was amazing to see how everyone has grown!"
+      description: "Batch 16 reunion after 9 years - it was amazing to see how everyone has grown!"
     },
     {
       id: "3",

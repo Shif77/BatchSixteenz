@@ -34,7 +34,7 @@ interface Achievement {
   year: number;
   field: string;
   description: string;
-  photo?: string;
+  imageUrl?: string;
 }
 
 const Achievements: React.FC = () => {
@@ -52,36 +52,36 @@ const Achievements: React.FC = () => {
   
   const achievements: Achievement[] = [
     {
-      name: "Sarah Johnson",
-      achievement: "Nobel Prize in Physics",
-      year: 2023,
-      field: "Science",
-      description: "Groundbreaking research in quantum computing that revolutionized the field and opened new possibilities for secure communications and advanced computational methods.",
-      photo: "/images/placeholder.jpg"
+      name: "Batch 16",
+      achievement: "Winners of KGHSK Cricekt Tournament 3 times",
+      year: 2025,
+      field: "Sports",
+      description: "First & the only team to win the title for three consecutive times",
+      imageUrl: "/images/cricket.jpg"
     },
     {
-      name: "Michael Chen",
-      achievement: "Pulitzer Prize for Fiction",
+      name: "Harun Or Rashid Shuvo",
+      achievement: "Nobel Prize for Peace",
       year: 2022,
-      field: "Literature",
-      description: "Award-winning novel 'Echoes of Tomorrow' that explores themes of identity and belonging in a post-digital world.",
-      photo: "/images/placeholder.jpg"
+      field: "Peace",
+      description: "He got the noble for maintaining peace and stability in the world.",
+      imageUrl: "/images/harun.jpg"
     },
     {
-      name: "Priya Patel",
+      name: "Sadequzzaman Saikat",
       achievement: "Olympic Gold Medal",
       year: 2024,
       field: "Sports",
-      description: "Gold medal in badminton singles at the 2024 Summer Olympics, becoming the youngest champion in the sport's history.",
-      photo: "/images/placeholder.jpg"
+      description: "He got the medal by defeating Usain Bolt in the 100m sprint.",
+      imageUrl: "/images/saikat.jpg"
     },
     {
-      name: "David Okafor",
-      achievement: "Forbes 30 Under 30",
+      name: "Sadman Sakib",
+      achievement: "Miss Universe",
       year: 2023,
-      field: "Business",
-      description: "Founded a sustainable energy startup that has brought affordable solar power to over 100,000 homes in developing regions.",
-      photo: "/images/placeholder.jpg"
+      field: "Fasion",
+      description: "Became the first woman to win the Miss Universe by defeating 196 countries.",
+      imageUrl: "/images/oishik.jpg"
     }
   ];
 
@@ -396,7 +396,7 @@ const Achievements: React.FC = () => {
                 boxShadow: '0 10px 30px rgba(0,0,0,0.2)'
               }}>
                 <img 
-                  src={selectedAchievement.photo} 
+                  src={selectedAchievement.imageUrl} 
                   alt={selectedAchievement.name}
                   style={{ 
                     width: '100%', 

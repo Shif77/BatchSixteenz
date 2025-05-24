@@ -48,40 +48,40 @@ const Memoriam: React.FC = () => {
   const memorials: Memorial[] = [
     {
       id: 1,
-      name: "James Wilson",
+      name: "USER1",
       yearBorn: "1998",
       yearPassed: "2020",
-      tribute: "A beloved classmate whose kindness and infectious laughter brightened our school days. James was known for his academic brilliance and athletic prowess, but most importantly for his genuine friendship that touched everyone who knew him.",
-      photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80",
+      tribute: "A beloved classmate whose kindness and infectious laughter brightened our school days. User1 was known for his academic brilliance and athletic prowess, but most importantly for his genuine friendship that touched everyone who knew him.",
+      photo: "",
       memories: [
-        "I remember how James helped me through calculus in our final year. He never gave up on anyone. - Sarah",
-        "The school football team was never the same without him. His spirit lives on in every game we play. - Michael"
+        "I remember how user1 helped me through calculus in our final year. He never gave up on anyone. - user",
+        "The school football team was never the same without him. His spirit lives on in every game we play. - user"
       ],
       quotes: "Live each day as if it were your last, learn as if you'll live forever."
     },
     {
       id: 2,
-      name: "Amina Rahman",
+      name: "USER2",
       yearBorn: "1997",
       yearPassed: "2022",
-      tribute: "Amina's creative spirit and determination inspired everyone around her. Her artwork still hangs in the school gallery, a testament to her talent and the legacy she left behind. She fought her illness with grace and never lost her smile.",
-      photo: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80",
+      tribute: "USER2 creative spirit and determination inspired everyone around him. His artwork still hangs in the school gallery, a testament to his talent and the legacy he left behind. He fought his illness with grace and never lost his smile.",
+      photo: "",
       memories: [
-        "Amina taught me to see beauty in everything. Her perspective changed how I view the world. - Priya",
-        "I'll never forget our late-night study sessions and her endless encouragement. - David"
+        "USER@ taught me to see beauty in everything. His perspective changed how I view the world. - USER",
+        "I'll never forget our late-night study sessions and his endless encouragement. - USER"
       ],
       quotes: "Art is how we decorate space; Music is how we decorate time."
     },
     {
       id: 3,
-      name: "Carlos Mendez",
+      name: "USER3",
       yearBorn: "1998",
       yearPassed: "2021",
-      tribute: "Carlos was the heart of our class gatherings, always bringing people together with his warm personality and inclusive nature. His dedication to community service inspired many of us to give back. The local shelter where he volunteered has named a program after him.",
-      photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80",
+      tribute: "USER3 was the heart of our class gatherings, always bringing people together with his warm personality and inclusive nature. His dedication to community service inspired many of us to give back. The local shelter where he volunteered has named a program after him.",
+      photo: "",
       memories: [
-        "Carlos convinced our whole class to join the beach cleanup. That day changed my life's direction. - Emma",
-        "His passion for helping others was contagious. I still volunteer at the shelter because of him. - Jason"
+        "USER3 convinced our whole class to join the field cleanup. That day changed my life's direction. - User",
+        "His passion for helping others was contagious. I still volunteer at the shelter because of him. - User"
       ],
       quotes: "The meaning of life is to find your gift. The purpose of life is to give it away."
     }

@@ -19,7 +19,7 @@ const Navbar: React.FC<NavbarProps> = ({ darkMode, setDarkMode }) => {
           flexGrow: 1,
           fontWeight: 'bold'
         }}>
-          NADIR ON THE GO
+          GO
         </Typography>
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
           <Button color="inherit" component={RouterLink} to="/directory">DIRECTORY</Button>
